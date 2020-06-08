@@ -15,7 +15,7 @@ class CreateJLAdvertiserPlanDataTable extends Migration
     {
         Schema::create('j_l_advertiser_plan_data', function (Blueprint $table) {
             $table->bigIncrements('id');
-            foreach (\App\JLAdvertiserPlanData::$fields as $key => $value) {
+            foreach (\App\Models\JLAdvertiserPlanData::$fields as $key => $value) {
                 if ($value['type'] === 'number') {
                     $table->integer($key)->nullable()->comment($value['comment']);
                 } else if ($value['type'] === 'float') {
