@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Http\Request;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+Route::prefix('v1')
+    ->name('api.v1.')
+    ->namespace('Api')
+    ->group(function () {
+        Route::prefix('juliang')->name('JL.')->group(function () {
+            Route::get('auth_code', 'JuliangController@juliangAuth')->name('authCode');
+            Route::get('account_info', 'JuliangController@accountInfo')->name('accountInfo');
+            Route::get('advertiser_plan_data', 'JuliangController@advertiserPlanData')->name('advertiserPlanData');
+            Route::get('advertiser_plan_data_pull', 'JuliangController@pullAdvertiserPlanData')->name('pullAdvertiserPlanData');
+
+        });
+
+
+    });
