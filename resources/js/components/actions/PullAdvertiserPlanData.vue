@@ -58,7 +58,7 @@
                 },
                 rules        : {
                     dates       : [
-                        { type: 'string', required: true, message: '请选择时间', trigger: 'change' }
+                        { required: true, message: '请选择时间', trigger: 'change' }
                     ],
                     account_type: [
                         { required: true, message: '请选择账户类型', trigger: 'change' }
