@@ -57,10 +57,10 @@
                     account_type: '',
                 },
                 rules        : {
-                    dates   : [
+                    dates       : [
                         { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
                     ],
-                    resource: [
+                    account_type: [
                         { required: true, message: '请选择账户类型', trigger: 'change' }
                     ],
                 },
