@@ -133,11 +133,14 @@ class JLAccount extends Model
 
     public static function makeAccount($data)
     {
+        $state       = request()->get('state');
+        $accountType = Arr::get(JLAccount::$accountTypeList, $state, null);
         foreach ($data['advertiser_ids'] as $advertiser_id) {
             $baseData = static::baseDataParser($data);
 
             $item = array_merge($data, $baseData, [
                 'advertiser_id' => $advertiser_id,
+                'account_type'  => $accountType,
             ]);
 
 

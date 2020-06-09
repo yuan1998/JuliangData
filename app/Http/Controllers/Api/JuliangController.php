@@ -33,6 +33,7 @@ class JuliangController extends Controller
     {
         $authCode = $request->get('auth_code', null);
 
+
         if (!$authCode)
             return view('juliang.auth', ['msg' => '授权错误.请正确操作']);
 
