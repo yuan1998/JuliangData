@@ -11,8 +11,8 @@
                 <i class="el-icon-warning-outline"></i>
                 每天会自动拉取前一天的数据,如果觉得数据不对,可以使用该操作手动拉取广告计划数据.
             </p>
-            <el-form ref="form" :model="form" label-width="80px">
-                <el-form-item label="时间">
+            <el-form ref="form" :rules="rules" :model="form" label-width="80px">
+                <el-form-item label="时间" prop="dates">
                     <el-date-picker
                             v-model="form.dates"
                             type="daterange"
@@ -24,7 +24,7 @@
                             :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="账户类型">
+                <el-form-item label="账户类型" prop="account_type">
                     <el-radio-group v-model="form.account_type" size="medium">
                         <el-radio v-for="(value, key) in accountTypeList" :key="key" border :label="key">
                             {{ value }}
