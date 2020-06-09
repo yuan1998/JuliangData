@@ -99,7 +99,9 @@
                 this.posting = true;
                 this.showPostLoading();
                 try {
-                    let result = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', this.form);
+                    let result = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
+                        params: this.form,
+                    });
                     let data   = result.data;
 
                     if (data.code === 0) {
