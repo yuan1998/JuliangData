@@ -105,11 +105,15 @@
                     let data   = result.data;
 
                     if (data.code === 0) {
-                        Swal.fire(
-                            '拉取数据成功!',
-                            '请刷新页面!',
-                            'success'
-                        );
+                        Swal.fire({
+                            title  : '拉取数据成功!',
+                            text   : '确认刷新页面!',
+                            icon   : 'success',
+                            onClose: () => {
+                                this.dialogVisible = false;
+                                $.admin.reload();
+                            }
+                        });
                     } else {
                         Swal.fire(
                             '错误!',
