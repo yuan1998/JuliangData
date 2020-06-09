@@ -1,15 +1,15 @@
 <template>
     <div style="display: none;" :style="'display:inline-block;'">
         <el-button size="mini" type="primary" @click="handleOpenModel">
-            导入数据
+            导出数据
         </el-button>
         <el-dialog
-                title="手动导入广告计划数据"
+                title="导出广告计划数据"
                 :visible.sync="dialogVisible"
                 width="50%">
             <p>
                 <i class="el-icon-warning-outline"></i>
-                每天会自动拉取前一天的数据,如果觉得数据不对,可以使用该操作手动拉取广告计划数据.
+                导出只会导出目前存储在服务器中的数据.
             </p>
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
                 <el-form-item label="医院类型" prop="hospital_type">
@@ -109,6 +109,19 @@
             };
         },
         methods: {
+            getFileName(data) {
+                let { dates, account_type, hospital_type } = data;
+
+                return `${ dates[ 0 ] }_${ dates[ 1 ] }_[${ this.hospitalTypeList[ hospital_type ] }_${ this.accountTypeList[ account_type ] }].xlsx`;
+            },
+            downFile(data, params) {
+                let fileName = this.getFileName(params);
+                let blob     = new Blob([ data ], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                });
+                saveAs(blob, fileName);
+
+            },
             async mapToPullApi() {
                 this.posting = true;
                 this.showPostLoading();
@@ -122,20 +135,16 @@
                         dates,
                     };
 
-                    let result = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
+                    let result = await axios.get('/api/v1/juliang/advertiser_plan_data_export', {
+                        responseType: 'blob',
                         params,
                     });
-                    let data   = result.data;
-
-                    if (data.code === 0) {
+                    if (result.status === 200) {
+                        this.downFile(result.data, params);
                         Swal.fire({
-                            title  : '拉取数据成功!',
-                            text   : '确认刷新页面!',
-                            icon   : 'success',
-                            onClose: () => {
-                                this.dialogVisible = false;
-                                $.admin.reload();
-                            }
+                            title: '导出数据成功!',
+                            text : '稍后自动下载!',
+                            icon : 'success',
                         });
                     } else {
                         Swal.fire(
@@ -144,9 +153,18 @@
                             'error',
                         );
                     }
+                    console.log(result);
+                    // let data   = result.data;
+                    //
+                    // if (data.code === 0) {
+                    //
+                    // } else {
+
+                    // }
 
 
                 } catch (e) {
+                    throw e;
                     Swal.fire(
                         '错误!',
                         e.message,
@@ -174,7 +192,6 @@
                 this.$refs[ 'form' ].validate((valid) => {
                     if (valid) {
                         this.mapToPullApi();
-
                     }
                 })
             },

@@ -28,8 +28,9 @@ class PullAdvertiserPlanDataAction extends Action
 
 
         return view('juliang.action.pullAdvertiserPlanData', [
-            'data'            => $data->toArray(),
-            'accountTypeList' => JLAccount::$accountTypeList,
+            'data'             => $data->toArray(),
+            'accountTypeList'  => JLAccount::$accountTypeList,
+            'hospitalTypeList' => JLAccount::$hospitalTypeList,
         ]);
     }
 

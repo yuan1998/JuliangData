@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Clients\JuliangClient;
+use App\Exports\JLAdvertiserPlanDataExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JLAdvertiserPlanDataRequest;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
-use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Maatwebsite\Excel\Facades\Excel;
 
 class JuliangController extends Controller
 {
+
+    /*
+https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&state={"hospital_type":"zx","account_type":"xian"}&scope=%5B4%5D&redirect_uri=http%3A%2F%2Fjuliang.xahmyk.cn%2Fapi%2Fv1%2Fjuliang%2Fauth_code%2F&rid=pjud7dsb11p
+     */
 
     /**
      * 迭代 日期范围, 在回调中传入当前日期
@@ -33,13 +39,13 @@ class JuliangController extends Controller
     {
         $authCode = $request->get('auth_code', null);
 
-
         if (!$authCode)
             return view('juliang.auth', ['msg' => '授权错误.请正确操作']);
 
         $json = JuliangClient::getAccessToken($authCode);
 
         if ($json['code'] === 0) {
+
             JLAccount::makeAccount($json['data']);
             return view('juliang.auth', ['msg' => '授权成功!']);
         } else {
@@ -75,12 +81,17 @@ class JuliangController extends Controller
         }
     }
 
-    public function pullAdvertiserPlanData(Request $request)
+    public function pullAdvertiserPlanData(JLAdvertiserPlanDataRequest $request)
     {
-        $dates = $request->get('dates');
-        $type  = $request->get('account_type');
+        $dates        = $request->get('dates');
+        $accountType  = $request->get('account_type');
+        $hospitalType = $request->get('hospital_type');
 
-        $accountData = JLAccount::query()->where('account_type', $type)->get();
+        $query = JLAccount::query();
+        $query->where('account_type', $accountType);
+        $query->where('hospital_type', $hospitalType);
+
+        $accountData = $query->get();
 
         foreach ($accountData as $account) {
             static::dateRangeForEach($dates, function ($str) use ($account) {
@@ -95,6 +106,13 @@ class JuliangController extends Controller
         ]);
     }
 
+    public function exportAdvertiserPlanData(JLAdvertiserPlanDataRequest $request)
+    {
+        $data = $request->all(['dates', 'account_type', 'hospital_type']);
+
+        $export = new JLAdvertiserPlanDataExport($data);
+        return Excel::download($export, $export->makeName());
+    }
 
     public function accountInfo(Request $request)
     {

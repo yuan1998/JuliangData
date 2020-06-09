@@ -21,6 +21,8 @@ class JLAccount extends Model
         'advertiser_id',
         'advertiser_name',
         'status',
+        'account_type',
+        'hospital_type',
     ];
 
     public static $statusList = [
@@ -31,6 +33,11 @@ class JLAccount extends Model
     public static $accountTypeList = [
         'beijing' => '北京账户',
         'xian'    => '西安账户',
+    ];
+
+    public static $hospitalTypeList = [
+        'zx' => '整形医院',
+        'kq' => '口腔医院',
     ];
 
     public function advertiserPlanData()
@@ -115,34 +122,30 @@ class JLAccount extends Model
                 'stat_datetime' => $date,
             ], $data);
         }
-
-
     }
 
-
-    public static function baseDataParser($data)
+    public static function baseDataParser($data, $state = [])
     {
         $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
         $refresh_token_expires_in = Carbon::now()->addSeconds($data['refresh_token_expires_in']);
-        return [
+        return array_merge([
             'expires_in'               => $expires_in,
             'refresh_token_expires_in' => $refresh_token_expires_in,
             'status'                   => 'enable'
-        ];
+        ], $state);
     }
 
     public static function makeAccount($data)
     {
-        $state       = request()->get('state');
-        $accountType = Arr::get(JLAccount::$accountTypeList, $state, null);
+        $state = request()->get('state');
+        $state = ($state && isJson($state)) ? json_decode($state, true) : [];
+
         foreach ($data['advertiser_ids'] as $advertiser_id) {
-            $baseData = static::baseDataParser($data);
+            $baseData = static::baseDataParser($data, $state);
 
             $item = array_merge($data, $baseData, [
                 'advertiser_id' => $advertiser_id,
-                'account_type'  => $accountType,
             ]);
-
 
             static::updateOrCreate(['advertiser_id' => $advertiser_id], $item);
         }

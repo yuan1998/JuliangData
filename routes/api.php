@@ -22,6 +22,8 @@ Route::prefix('v1')
             Route::get('account_info', 'JuliangController@accountInfo')->name('accountInfo');
             Route::get('advertiser_plan_data', 'JuliangController@advertiserPlanData')->name('advertiserPlanData');
             Route::get('advertiser_plan_data_pull', 'JuliangController@pullAdvertiserPlanData')->name('pullAdvertiserPlanData');
+            Route::get('advertiser_plan_data_export', 'JuliangController@exportAdvertiserPlanData')->name('exportAdvertiserPlanData');
+
 
         });
 

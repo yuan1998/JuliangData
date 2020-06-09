@@ -25,13 +25,11 @@ class JLAdvertiserPlanDataController extends AdminController
     public static function disableAutocomplete()
     {
         Admin::script(<<<EOT
-
 $(function() {
     'use strict';
     
     $('input.form-control').attr('autocomplete','off');
 })
-
 EOT
         );
     }
@@ -80,6 +78,7 @@ EOF
         });
 
         $grid->disableRowSelector();
+        $grid->disableExport();
         $grid->disableActions();
 
         $grid->fixColumns(2);
