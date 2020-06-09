@@ -99,8 +99,17 @@
                 this.posting = true;
                 this.showPostLoading();
                 try {
+                    let dates = this.form.dates.map((date) => {
+                        return moment(date).format('YYYY-MM-DD');
+                    });
+
+                    let params = {
+                        dates,
+                        account_type: this.form.account_type,
+                    };
+
                     let result = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
-                        params: this.form,
+                        params,
                     });
                     let data   = result.data;
 
