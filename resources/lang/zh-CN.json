@@ -9,6 +9,8 @@
   "File name": "文件名",
   "Path": "路径",
   "Log type": "日志类型",
+  "Comment": "备注",
+  "Hospital type": "医院类型",
   "A fresh verification link has been sent to your email address.": "新的验证链接已发送到您的 E-mail。",
   "All rights reserved.": "版本所有。",
   "Before proceeding, please check your email for a verification link.": "在继续之前请先验证您的 E-mail。",

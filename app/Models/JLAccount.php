@@ -23,6 +23,7 @@ class JLAccount extends Model
         'status',
         'account_type',
         'hospital_type',
+        'comment',
     ];
 
     public static $statusList = [

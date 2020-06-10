@@ -37,7 +37,7 @@ class AdvertiserPlanDataExport extends ExcelExporter implements WithMapping, Wit
         '点击率',
         '平均点击单价',
         '平均千次展现费用',
-        '消耗(虚)',
+        '消耗',
         '消耗(实)',
         '转化数',
         '转化成本',

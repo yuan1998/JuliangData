@@ -30,19 +30,20 @@ class JLAccountController extends AdminController
         $grid->disableCreateButton();
         $grid->disableExport();
 
-        $grid->column('advertiser_id', __('Advertiser id'));
-        $grid->column('advertiser_name', __('Advertiser name'));
-        $grid->column('status', __('Status'))->using(JLAccount::$statusList);
+        $grid->fixColumns(2);
+        $grid->column('hospital_type', __('Hospital type'))->using(JLAccount::$hospitalTypeList);
         $grid->column('account_type', __('Account type'))->display(function ($val) {
             if (!$val) return '未设置';
             return Arr::get(JLAccount::$accountTypeList, $val, '未设置');
         });
+        $grid->column('advertiser_name', __('Advertiser name'));
+        $grid->column('advertiser_id', __('Advertiser id'));
+        $grid->column('status', __('Status'))->using(JLAccount::$statusList);
         $grid->column('rebate', __('Rebate'))->display(function ($val) {
             return $val . '%';
-
         });
+        $grid->column('comment', __('Comment'))->editable();
         $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -85,6 +86,7 @@ class JLAccountController extends AdminController
         $form->text('advertiser_id', __('Advertiser id'))->readonly();
         $form->text('advertiser_name', __('Advertiser name'))->readonly();
         $form->divider();
+        $form->text('comment', __('Comment'));
         $form->select('account_type', __('Account type'))->options(JLAccount::$accountTypeList);
 
         $form->currency('rebate', __('Rebate'))->default(0.00)->symbol('%');
