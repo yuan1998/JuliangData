@@ -86,6 +86,7 @@ class JLAccountController extends AdminController
         $form->text('advertiser_name', __('Advertiser name'))->readonly();
         $form->divider();
         $form->text('comment', __('Comment'));
+        $form->select('hospital_type', __('Hospital type'))->options(JLAccount::$hospitalTypeList);
         $form->select('account_type', __('Account type'))->options(JLAccount::$accountTypeList);
 
         $form->currency('rebate', __('Rebate'))->default(0.00)->symbol('%');

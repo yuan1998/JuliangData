@@ -2,6 +2,8 @@
 
 namespace App\Clients;
 
+use App\Models\JLAccount;
+use App\Models\JLApp;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
@@ -70,15 +72,22 @@ class JuliangClient
 
     /**
      * 刷新账户token.
-     * @param $token string 用户获取新Token的Refresh_token
-     * @return array
+     * @param $model JLAccount 用户获取新Token的Refresh_token
+     * @return array|boolean
      */
-    public static function refreshToken($token)
+    public static function refreshToken($model)
     {
+
+        $token     = $model->refresh_token;
+        $appConfig = $model->app_config;
+
+        if (!$appConfig) return false;
+
+
         $result = static::getClient()->post(static::$request_url['refresh_token'], [
             'form_params' => [
-                "app_id"        => static::$app_id,
-                "secret"        => static::$app_secret,
+                "app_id"        => $appConfig['app_id'],
+                "secret"        => $appConfig['app_secret'],
                 "grant_type"    => 'refresh_token',
                 "refresh_token" => $token,
             ]
@@ -90,16 +99,17 @@ class JuliangClient
     /**
      * 获取 Access_token
      * @param $auth_code String 授权码
+     * @param $appModel  JLApp App配置
      * @return array
      */
-    public static function getAccessToken($auth_code)
+    public static function getAccessToken($auth_code, $appModel)
     {
         $client = static::getClient();
 
         $result = $client->post(static::$request_url['access_token'], [
             'form_params' => [
-                "app_id"     => static::$app_id,
-                "secret"     => static::$app_secret,
+                "app_id"     => $appModel['app_id'],
+                "secret"     => $appModel['app_secret'],
                 "grant_type" => "auth_code",
                 "auth_code"  => $auth_code,
             ]

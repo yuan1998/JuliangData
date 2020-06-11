@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\JLAdvertiserPlanDataRequest;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
+use App\Models\JLApp;
 use Carbon\CarbonPeriod;
 use Closure;
 use Illuminate\Http\Request;
@@ -42,10 +43,18 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         if (!$authCode)
             return view('juliang.auth', ['msg' => '授权错误.请正确操作']);
 
-        $json = JuliangClient::getAccessToken($authCode);
+        $state = request()->get('state');
+        if (!Arr::exists($state, 'app_id'))
+            return view('juliang.auth', ['msg' => '授权错误.确实正确的APP ID,请检查您的授权链接']);
+
+        if (!$appModel = JLApp::find($state['app_id'])) {
+            return view('juliang.auth', ['msg' => '授权错误.不存在的APP ID,请检查您的授权链接']);
+        }
+
+
+        $json = JuliangClient::getAccessToken($authCode, $appModel);
 
         if ($json['code'] === 0) {
-
             JLAccount::makeAccount($json['data']);
             return view('juliang.auth', ['msg' => '授权成功!']);
         } else {

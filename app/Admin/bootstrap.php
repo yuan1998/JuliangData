@@ -27,6 +27,7 @@ Admin::js('https://cdn.jsdelivr.net/npm/axios@0.19.0/dist/axios.min.js');
 Admin::js('https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js');
 Admin::js('https://cdn.jsdelivr.net/npm/moment@2.26.0/moment.min.js');
 Admin::js('https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js');
+Admin::js('https://cdn.jsdelivr.net/npm/vue-clipboard@0.0.1/vue-clipboard.min.js');
 Admin::css('/css/app.css');
 
 Encore\Admin\Form::forget(['map', 'editor']);

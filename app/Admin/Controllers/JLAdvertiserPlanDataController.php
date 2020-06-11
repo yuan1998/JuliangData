@@ -22,28 +22,6 @@ class JLAdvertiserPlanDataController extends AdminController
      */
     protected $title = '巨量广告计划数据';
 
-    public static function disableAutocomplete()
-    {
-        Admin::script(<<<EOT
-$(function() {
-    'use strict';
-    
-    $('input.form-control').attr('autocomplete','off');
-})
-EOT
-        );
-    }
-
-    public static function initVue()
-    {
-        \Encore\Admin\Facades\Admin::script(<<<EOF
-        const app = new Vue({
-            el: '#app'
-        });
-EOF
-        );
-    }
-
 
     /**
      * Make a grid builder.
@@ -52,13 +30,13 @@ EOF
      */
     protected function grid()
     {
-        static::initVue();
+        initVue();
+        disableAutocomplete();
         $grid = new Grid(new JLAdvertiserPlanData());
         $keys = array_keys(JLAdvertiserPlanData::$displayFields);
         $grid->model()
             ->select(array_merge($keys, ['advertiser_id']))->with(['accountData'])
             ->orderBy('stat_datetime', 'desc');
-        static::disableAutocomplete();
         $grid->disableCreateButton();
         $grid->exporter(new AdvertiserPlanDataExport());
 

@@ -17,4 +17,5 @@ Route::group([
     $router->resource('jl-accounts', "JLAccountController");
     $router->resource('jl-advertiser-plan-datas', JLAdvertiserPlanDataController::class);
     $router->resource('export-logs', ExportLogController::class);
+    $router->resource('j-l-apps', JLAppController::class);
 });

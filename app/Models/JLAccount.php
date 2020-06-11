@@ -25,6 +25,7 @@ class JLAccount extends Model
         'account_type',
         'hospital_type',
         'comment',
+        'app_id',
     ];
 
     public static $statusList = [
@@ -42,6 +43,31 @@ class JLAccount extends Model
         'kq' => '口腔医院',
     ];
 
+    public static function setAppId($id)
+    {
+        static::query()
+            ->update([
+                'app_id' => $id,
+            ]);
+    }
+
+    public function app()
+    {
+        return $this->belongsTo(JLApp::class, 'app_id', 'id');
+    }
+
+    public function getAppConfigAttribute()
+    {
+        $app = $this->app;
+
+        if ($app) return false;
+
+        return [
+            'app_id'     => $app->app_id,
+            'app_secret' => $app->secret,
+        ];
+    }
+
     public function advertiserPlanData()
     {
         return $this->hasMany(JLAdvertiserPlanData::class, 'advertiser_id', 'advertiser_id');
@@ -57,10 +83,9 @@ class JLAccount extends Model
 
     public function refreshToken()
     {
-        $token    = $this->refresh_token;
-        $response = JuliangClient::refreshToken($token);
+        $response = JuliangClient::refreshToken($this);
 
-        if ($response['code'] == 0) {
+        if ($response && $response['code'] == 0) {
             $data     = $response['data'];
             $baseData = static::baseDataParser($data);
             $this->fill(array_merge($data, $baseData));
@@ -149,7 +174,7 @@ class JLAccount extends Model
         return array_merge([
             'expires_in'               => $expires_in,
             'refresh_token_expires_in' => $refresh_token_expires_in,
-            'status'                   => 'enable'
+            'status'                   => 'enable',
         ], $state);
     }
 
