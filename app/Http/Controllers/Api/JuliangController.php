@@ -43,8 +43,9 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         if (!$authCode)
             return view('juliang.auth', ['msg' => '授权错误.请正确操作']);
 
-        $state = request()->get('state');
-        if (!Arr::exists($state, 'app_id'))
+        $state = json_decode(request()->get('state'), true);
+
+        if (is_array($state) && !Arr::exists($state, 'app_id'))
             return view('juliang.auth', ['msg' => '授权错误.确实正确的APP ID,请检查您的授权链接']);
 
         if (!$appModel = JLApp::find($state['app_id'])) {
@@ -55,7 +56,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         $json = JuliangClient::getAccessToken($authCode, $appModel);
 
         if ($json['code'] === 0) {
-            JLAccount::makeAccount($json['data']);
+            JLAccount::makeAccount($json['data'],$state);
             return view('juliang.auth', ['msg' => '授权成功!']);
         } else {
             return view('juliang.auth', ['msg' => $json['message']]);

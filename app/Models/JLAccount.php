@@ -59,12 +59,11 @@ class JLAccount extends Model
     public function getAppConfigAttribute()
     {
         $app = $this->app;
-
-        if ($app) return false;
+        if (!$app) return false;
 
         return [
             'app_id'     => $app->app_id,
-            'app_secret' => $app->secret,
+            'app_secret' => $app->app_secret,
         ];
     }
 
@@ -178,11 +177,8 @@ class JLAccount extends Model
         ], $state);
     }
 
-    public static function makeAccount($data)
+    public static function makeAccount($data, $state)
     {
-        $state = request()->get('state');
-        $state = ($state && isJson($state)) ? json_decode($state, true) : [];
-
         foreach ($data['advertiser_ids'] as $advertiser_id) {
             $baseData = static::baseDataParser($data, $state);
 
