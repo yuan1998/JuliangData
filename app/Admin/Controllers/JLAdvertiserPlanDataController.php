@@ -55,7 +55,9 @@ EOF
         static::initVue();
         $grid = new Grid(new JLAdvertiserPlanData());
         $keys = array_keys(JLAdvertiserPlanData::$displayFields);
-        $grid->model()->select(array_merge($keys, ['advertiser_id']))->with(['accountData']);
+        $grid->model()
+            ->select(array_merge($keys, ['advertiser_id']))->with(['accountData'])
+            ->orderBy('stat_datetime', 'desc');
         static::disableAutocomplete();
         $grid->disableCreateButton();
         $grid->exporter(new AdvertiserPlanDataExport());

@@ -130,7 +130,7 @@
                     if (data.code === 0) {
                         Swal.fire({
                             title  : '拉取数据成功!',
-                            text   : '确认刷新页面!',
+                            text   : data.message,
                             icon   : 'success',
                             onClose: () => {
                                 this.dialogVisible = false;

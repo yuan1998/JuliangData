@@ -6,6 +6,7 @@ use App\Clients\JuliangClient;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @method static JLAccount updateOrCreate(array $array, array $item)
@@ -28,7 +29,7 @@ class JLAccount extends Model
 
     public static $statusList = [
         'enable'  => '激活中',
-        'disable' => '禁止中',
+        'disable' => '禁止中,请重新授权',
     ];
 
     public static $accountTypeList = [
@@ -59,9 +60,10 @@ class JLAccount extends Model
         $token    = $this->refresh_token;
         $response = JuliangClient::refreshToken($token);
 
-        if (Arr::exists($response, 'data')) {
-            $baseData = static::baseDataParser($response['data']);
-            $this->fill($baseData);
+        if ($response['code'] == 0) {
+            $data     = $response['data'];
+            $baseData = static::baseDataParser($data);
+            $this->fill(array_merge($data, $baseData));
             $this->save();
         } else {
             $this->fill(['status' => 'disable']);
@@ -77,6 +79,33 @@ class JLAccount extends Model
         }
     }
 
+    public function responseCode($response, $start, $end, $page)
+    {
+        $code = Arr::get($response, 'code', null);
+        if ($code === null) return false;
+
+        switch ($code) {
+            case 0 :
+                $data = $response['data'];
+                $list = $data['list'];
+                $this->saveResponseList($list);
+
+                $pageInfo = $data['page_info'];
+                if ($pageInfo['total_page'] > $page) {
+                    $this->getAdvertiserPlanData($start, $end, $page + 1);
+                }
+                return $response;
+            case 40105:
+                $this->fill(['status' => 'disable']);
+                $this->update();
+                return $response;
+            default:
+                Log::info('无法处理的CODE码', ['code' => $code]);
+                return $response;
+        }
+
+    }
+
     public function getAdvertiserPlanData($start, $end, $page = 1, $pageSize = 1000)
     {
         $this->checkToken();
@@ -90,19 +119,7 @@ class JLAccount extends Model
             'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
         ], $this->access_token);
 
-        if ($response['code'] == 0) {
-            $data = $response['data'];
-            $list = $data['list'];
-            $this->saveResponseList($list);
-
-            $pageInfo = $data['page_info'];
-            if ($pageInfo['total_page'] > $page) {
-                $this->getAdvertiserPlanData($start, $end, $page + 1);
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return $this->responseCode($response, $start, $end, $page);
     }
 
 

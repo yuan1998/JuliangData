@@ -509,7 +509,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 if (data.code === 0) {
                   Swal.fire({
                     title: '拉取数据成功!',
-                    text: '确认刷新页面!',
+                    text: data.message,
                     icon: 'success',
                     onClose: function onClose() {
                       _this.dialogVisible = false;

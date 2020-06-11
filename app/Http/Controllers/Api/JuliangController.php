@@ -63,16 +63,14 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
         if ($model) {
             $result = $model->getAdvertiserPlanData($startDate, $endDate);
-            if ($result)
+            if ($result === false) {
                 return response()->json([
-                    'code'    => 0,
-                    'message' => '操作成功'
+                    'code'    => 1001,
+                    'message' => '发生错误,请联系管理员'
                 ]);
-            else return response()->json([
-                'code'    => 1001,
-                'message' => '发生错误,请联系管理员'
-            ]);
-
+            } else {
+                return response()->json($result);
+            }
         } else {
             return response()->json([
                 'code'    => 1000,
@@ -87,22 +85,34 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         $accountType  = $request->get('account_type');
         $hospitalType = $request->get('hospital_type');
 
-        $query = JLAccount::query();
-        $query->where('account_type', $accountType);
-        $query->where('hospital_type', $hospitalType);
+        $query = JLAccount::query()
+            ->where('status', 'enable')
+            ->where('account_type', $accountType)
+            ->where('hospital_type', $hospitalType);
 
         $accountData = $query->get();
 
+        $successCount = 0;
+        $errorCount   = 0;
+        $logs         = [];
         foreach ($accountData as $account) {
-            static::dateRangeForEach($dates, function ($str) use ($account) {
-                $string = $str->toDateString();
-                $account->getAdvertiserPlanData($string, $string);
+            static::dateRangeForEach($dates, function ($str) use ($account, &$successCount, &$errorCount, &$logs) {
+                $dateString = $str->toDateString();
+                $result     = $account->getAdvertiserPlanData($dateString, $dateString);
+
+                if (Arr::get($result, 'code') == 0) {
+                    $successCount++;
+                } else {
+                    $errorCount++;
+                    array_push($logs, $result);
+                }
             });
         }
 
         return response()->json([
             'code'    => 0,
-            'message' => '成功',
+            'message' => "成功拉取账户{$successCount}个,失败账户{$errorCount}个",
+            'logs'    => $logs
         ]);
     }
 

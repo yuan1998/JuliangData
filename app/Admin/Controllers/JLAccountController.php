@@ -81,7 +81,6 @@ class JLAccountController extends AdminController
     {
         $form = new Form(new JLAccount());
 
-//        $form->setTitle('test');
         $form->text('status', __('Status'))->readonly();
         $form->text('advertiser_id', __('Advertiser id'))->readonly();
         $form->text('advertiser_name', __('Advertiser name'))->readonly();
