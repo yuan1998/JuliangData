@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\HospitalType;
 use App\Models\JLAccount;
 use App\Models\JLAdvertiserPlanData;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -54,21 +55,17 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
      */
     public function __construct($data)
     {
-        $this->data   = $data;
-        $dates        = $data['dates'];
-        $accountType  = $data['account_type'];
-        $hospitalType = $data['hospital_type'];
+        $this->data = $data;
+        $dates      = $data['dates'];
+        $hospitalId = $data['hospital_id'];
 
         $this->query = JLAdvertiserPlanData::query()
             ->with(['accountData'])
             ->select($this->selects)
             ->whereBetween('stat_datetime', $dates)
-            ->whereHas('accountData', function ($query) use ($accountType, $hospitalType) {
-                if ($accountType) {
-                    $query->where('account_type', $accountType);
-                }
-                if ($hospitalType) {
-                    $query->where('hospital_type', $hospitalType);
+            ->whereHas('accountData', function ($query) use ($hospitalId) {
+                if ($hospitalId) {
+                    $query->where('hospital_id', $hospitalId);
                 }
             });
 
@@ -109,10 +106,11 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
     public function makeName(): string
     {
         $dates        = $this->data['dates'];
-        $accountType  = JLAccount::$accountTypeList[$this->data['account_type']];
-        $hospitalType = JLAccount::$hospitalTypeList[$this->data['hospital_type']];
+        $id           = $this->data['hospital_id'];
+        $hospitalType = HospitalType::find($id);
+        $name         = $hospitalType->hospital_name;
 
-        return "{$dates[0]}_{$dates[1]}_[{$accountType}_{$hospitalType}].xlsx";
+        return "{$dates[0]}_{$dates[1]}_[{$name}].xlsx";
 
     }
 }

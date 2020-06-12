@@ -2,6 +2,7 @@
 
 namespace App\Admin\Actions;
 
+use App\Models\HospitalType;
 use App\Models\JLAccount;
 use Encore\Admin\Actions\Action;
 use Illuminate\Http\Request;
@@ -24,13 +25,9 @@ class PullAdvertiserPlanDataAction extends Action
 
     public function render()
     {
-        $data = JLAccount::query()->select(['account_type', 'advertiser_id', 'advertiser_name'])->get();
-
-
+        $hospitalTypeList = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
         return view('juliang.action.pullAdvertiserPlanData', [
-            'data'             => $data->toArray(),
-            'accountTypeList'  => JLAccount::$accountTypeList,
-            'hospitalTypeList' => JLAccount::$hospitalTypeList,
+            'hospitalTypeList' => $hospitalTypeList,
         ]);
     }
 

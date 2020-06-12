@@ -12,17 +12,10 @@
                 每天会自动拉取前一天的数据,如果觉得数据不对,可以使用该操作手动拉取广告计划数据.
             </p>
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-                <el-form-item label="医院类型" prop="hospital_type">
-                    <el-radio-group v-model="form.hospital_type" size="medium">
-                        <el-radio v-for="(value, key) in hospitalTypeList" :key="key" border :label="key">
-                            {{ value }}
-                        </el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="账户类型" prop="account_type">
-                    <el-radio-group v-model="form.account_type" size="medium">
-                        <el-radio v-for="(value, key) in accountTypeList" :key="key" border :label="key">
-                            {{ value }}
+                <el-form-item label="医院类型" prop="hospital_id">
+                    <el-radio-group v-model="form.hospital_id" size="medium">
+                        <el-radio v-for="(item, key) in hospitalTypeList" :key="key" border :label="key">
+                            {{ item }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
@@ -38,7 +31,6 @@
                             :picker-options="pickerOptions">
                     </el-date-picker>
                 </el-form-item>
-
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -53,8 +45,10 @@
     export default {
         name   : "action-pull-advertiser-plan-data",
         props  : {
-            accountTypeList : Object,
             hospitalTypeList: Object,
+        },
+        mounted() {
+            console.log('this.hospitalTypeList :', this.hospitalTypeList);
         },
         data() {
             return {
@@ -62,18 +56,14 @@
                 dialogVisible: false,
                 value2       : '',
                 form         : {
-                    dates        : '',
-                    account_type : '',
-                    hospital_type: '',
+                    dates      : '',
+                    hospital_id: '',
                 },
                 rules        : {
-                    dates        : [
+                    dates      : [
                         { required: true, message: '请选择时间', trigger: 'change' }
                     ],
-                    account_type : [
-                        { required: true, message: '请选择账户类型', trigger: 'change' }
-                    ],
-                    hospital_type: [
+                    hospital_id: [
                         { required: true, message: '请选择医院类型', trigger: 'change' }
                     ],
 
@@ -174,7 +164,6 @@
                 this.$refs[ 'form' ].validate((valid) => {
                     if (valid) {
                         this.mapToPullApi();
-
                     }
                 })
             },

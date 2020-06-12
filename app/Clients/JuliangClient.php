@@ -83,7 +83,6 @@ class JuliangClient
 
         if (!$appConfig) return false;
 
-
         $result = static::getClient()->post(static::$request_url['refresh_token'], [
             'form_params' => [
                 "app_id"        => $appConfig['app_id'],

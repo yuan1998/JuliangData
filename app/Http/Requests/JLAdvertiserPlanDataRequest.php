@@ -24,9 +24,8 @@ class JLAdvertiserPlanDataRequest extends FormRequest
     public function rules()
     {
         return [
-            'dates'         => 'required',
-            'account_type'  => 'required',
-            'hospital_type' => 'required',
+            'dates'       => 'required',
+            'hospital_id' => 'required',
         ];
     }
 }

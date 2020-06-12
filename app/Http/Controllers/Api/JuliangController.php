@@ -56,7 +56,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         $json = JuliangClient::getAccessToken($authCode, $appModel);
 
         if ($json['code'] === 0) {
-            JLAccount::makeAccount($json['data'],$state);
+            JLAccount::makeAccount($json['data'], $state);
             return view('juliang.auth', ['msg' => '授权成功!']);
         } else {
             return view('juliang.auth', ['msg' => $json['message']]);
@@ -91,14 +91,12 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
     public function pullAdvertiserPlanData(JLAdvertiserPlanDataRequest $request)
     {
-        $dates        = $request->get('dates');
-        $accountType  = $request->get('account_type');
-        $hospitalType = $request->get('hospital_type');
+        $dates      = $request->get('dates');
+        $hospitalId = $request->get('hospital_id');
 
         $query = JLAccount::query()
             ->where('status', 'enable')
-            ->where('account_type', $accountType)
-            ->where('hospital_type', $hospitalType);
+            ->where('hospital_id', $hospitalId);
 
         $accountData = $query->get();
 
@@ -128,7 +126,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
     public function exportAdvertiserPlanData(JLAdvertiserPlanDataRequest $request)
     {
-        $data = $request->all(['dates', 'account_type', 'hospital_type']);
+        $data = $request->all(['dates', 'hospital_id']);
 
         $export = new JLAdvertiserPlanDataExport($data);
         return Excel::download($export, $export->makeName());

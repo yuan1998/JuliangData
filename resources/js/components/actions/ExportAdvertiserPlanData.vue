@@ -12,20 +12,14 @@
                 导出只会导出目前存储在服务器中的数据.
             </p>
             <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-                <el-form-item label="医院类型" prop="hospital_type">
-                    <el-radio-group v-model="form.hospital_type" size="medium">
-                        <el-radio v-for="(value, key) in hospitalTypeList" :key="key" border :label="key">
-                            {{ value }}
+                <el-form-item label="医院类型" prop="hospital_id">
+                    <el-radio-group v-model="form.hospital_id" size="medium">
+                        <el-radio v-for="(item, key) in hospitalTypeList" :key="key" border :label="key">
+                            {{ item }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="账户类型" prop="account_type">
-                    <el-radio-group v-model="form.account_type" size="medium">
-                        <el-radio v-for="(value, key) in accountTypeList" :key="key" border :label="key">
-                            {{ value }}
-                        </el-radio>
-                    </el-radio-group>
-                </el-form-item>
+
                 <el-form-item label="时间" prop="dates">
                     <el-date-picker
                             v-model="form.dates"
@@ -53,7 +47,6 @@
     export default {
         name   : "action-pull-advertiser-plan-data",
         props  : {
-            accountTypeList : Object,
             hospitalTypeList: Object,
         },
         data() {
@@ -62,18 +55,14 @@
                 dialogVisible: false,
                 value2       : '',
                 form         : {
-                    dates        : '',
-                    account_type : '',
-                    hospital_type: '',
+                    dates      : '',
+                    hospital_id: '',
                 },
                 rules        : {
-                    dates        : [
+                    dates      : [
                         { required: true, message: '请选择时间', trigger: 'change' }
                     ],
-                    account_type : [
-                        { required: true, message: '请选择账户类型', trigger: 'change' }
-                    ],
-                    hospital_type: [
+                    hospital_id: [
                         { required: true, message: '请选择医院类型', trigger: 'change' }
                     ],
 
@@ -110,9 +99,10 @@
         },
         methods: {
             getFileName(data) {
-                let { dates, account_type, hospital_type } = data;
+                let { dates, hospital_id } = data;
 
-                return `${ dates[ 0 ] }_${ dates[ 1 ] }_[${ this.hospitalTypeList[ hospital_type ] }_${ this.accountTypeList[ account_type ] }].xlsx`;
+                let name = this.hospitalTypeList[ hospital_id ];
+                return `${ dates[ 0 ] }_${ dates[ 1 ] }_[${ name }].xlsx`;
             },
             downFile(data, params) {
                 let fileName = this.getFileName(params);
@@ -135,25 +125,30 @@
                         dates,
                     };
 
-                    let result = await axios.get('/api/v1/juliang/advertiser_plan_data_export', {
-                        responseType: 'blob',
-                        params,
-                    });
-                    if (result.status === 200) {
+                    try {
+                        let result = await axios.get('/api/v1/juliang/advertiser_plan_data_export', {
+                            responseType: 'blob',
+                            params,
+                        });
+                        let data   = result.data;
+                        console.log(result);
+
                         this.downFile(result.data, params);
                         Swal.fire({
                             title: '导出数据成功!',
                             text : '稍后自动下载!',
                             icon : 'success',
                         });
-                    } else {
+                    } catch (e) {
+                        let message = e.response.data.message;
                         Swal.fire(
                             '错误!',
-                            data.message,
+                            message,
                             'error',
                         );
                     }
-                    console.log(result);
+
+
                     // let data   = result.data;
                     //
                     // if (data.code === 0) {

@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\HospitalType;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -30,11 +31,12 @@ class JLAccountController extends AdminController
         $grid->disableCreateButton();
         $grid->disableExport();
 
-        $grid->fixColumns(2);
-        $grid->column('hospital_type', __('Hospital type'))->using(JLAccount::$hospitalTypeList);
-        $grid->column('account_type', __('Account type'))->display(function ($val) {
+        $grid->fixColumns(1);
+        $options = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
+        
+        $grid->column('hospital_id', __('Hospital name'))->display(function ($val) use ($options) {
             if (!$val) return '未设置';
-            return Arr::get(JLAccount::$accountTypeList, $val, '未设置');
+            return Arr::get($options, $val, '未设置');
         });
         $grid->column('advertiser_name', __('Advertiser name'));
         $grid->column('advertiser_id', __('Advertiser id'));
@@ -85,11 +87,12 @@ class JLAccountController extends AdminController
         $form->text('advertiser_id', __('Advertiser id'))->readonly();
         $form->text('advertiser_name', __('Advertiser name'))->readonly();
         $form->divider();
-        $form->text('comment', __('Comment'));
-        $form->select('hospital_type', __('Hospital type'))->options(JLAccount::$hospitalTypeList);
-        $form->select('account_type', __('Account type'))->options(JLAccount::$accountTypeList);
 
+        $options = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
+        $form->select('hospital_id', __('Hospital name'))->options($options);
         $form->currency('rebate', __('Rebate'))->default(0.00)->symbol('%');
+        $form->text('comment', __('Comment'));
+
 
         return $form;
     }

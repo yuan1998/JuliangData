@@ -24,6 +24,7 @@ class JLAccount extends Model
         'status',
         'account_type',
         'hospital_type',
+        'hospital_id',
         'comment',
         'app_id',
     ];

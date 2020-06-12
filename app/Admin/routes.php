@@ -18,4 +18,5 @@ Route::group([
     $router->resource('jl-advertiser-plan-datas', JLAdvertiserPlanDataController::class);
     $router->resource('export-logs', ExportLogController::class);
     $router->resource('j-l-apps', JLAppController::class);
+    $router->resource('hospital-types', HospitalTypeController::class);
 });
