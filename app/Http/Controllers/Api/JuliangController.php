@@ -6,6 +6,7 @@ use App\Clients\JuliangClient;
 use App\Exports\JLAdvertiserPlanDataExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JLAdvertiserPlanDataRequest;
+use App\Models\HospitalType;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
 use App\Models\JLApp;
@@ -45,12 +46,15 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
         $state = json_decode(request()->get('state'), true);
 
-        if (is_array($state) && !Arr::exists($state, 'app_id'))
+        if (is_array($state) && (!Arr::exists($state, 'app_id') || !Arr::exists($state, 'hospital_id')))
             return view('juliang.auth', ['msg' => '授权错误.确实正确的APP ID,请检查您的授权链接']);
 
         if (!$appModel = JLApp::find($state['app_id'])) {
             return view('juliang.auth', ['msg' => '授权错误.不存在的APP ID,请检查您的授权链接']);
         }
+        
+        if (!HospitalType::query()->where('id', $state['hospital_id'])->exists())
+            return view('juliang.auth', ['msg' => '授权错误.不存在的Hospital ID,请检查您的授权链接']);
 
 
         $json = JuliangClient::getAccessToken($authCode, $appModel);

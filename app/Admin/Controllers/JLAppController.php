@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\HospitalType;
 use App\Models\JLAccount;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -22,12 +23,11 @@ class JLAppController extends AdminController
 
     public function index(Content $content)
     {
-        $hospitalTypeList = json_encode(JLAccount::$hospitalTypeList);
-        $accountTypeList  = json_encode(JLAccount::$accountTypeList);
+        $hospitalTypeList = HospitalType::all()->pluck('hospital_name', 'id')->toJson();
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body("<modal-generate-auth-url :hospital-type-list='{$hospitalTypeList}' :account-type-list='{$accountTypeList}'>")
+            ->body("<modal-generate-auth-url :hospital-type-list='{$hospitalTypeList}'>")
             ->body($this->grid());
     }
 
@@ -47,7 +47,6 @@ class JLAppController extends AdminController
             $create->text('app_id', __('App id'));
             $create->text('app_secret', __('App secret'));
         });
-
         $grid->column('id', __('Id'))->display(function () {
             $data = $this->toJson();
             return "<button-generate-auth-url :data='$data'></button-generate-auth-url>";

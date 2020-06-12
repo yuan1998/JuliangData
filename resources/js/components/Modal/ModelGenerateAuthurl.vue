@@ -18,17 +18,9 @@
                             {{ itemData.app_secret }}
                         </p>
                     </el-form-item>
-
-                    <el-form-item label="医院类型" prop="hospital_type">
-                        <el-radio-group v-model="form.hospital_type" size="medium">
+                    <el-form-item label="医院类型" prop="hospital_id">
+                        <el-radio-group v-model="form.hospital_id" size="medium">
                             <el-radio v-for="(value, key) in hospitalTypeList" :key="key" border :label="key">
-                                {{ value }}
-                            </el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="账户类型" prop="account_type">
-                        <el-radio-group v-model="form.account_type" size="medium">
-                            <el-radio v-for="(value, key) in accountTypeList" :key="key" border :label="key">
                                 {{ value }}
                             </el-radio>
                         </el-radio-group>
@@ -53,7 +45,6 @@
     export default {
         name   : "modal-generate-auth-url",
         props  : {
-            accountTypeList : Object,
             hospitalTypeList: Object,
         },
         data() {
@@ -62,15 +53,10 @@
                 dialogVisible: false,
                 url          : '',
                 form         : {
-                    account_type : '',
-                    hospital_type: '',
+                    hospital_id: '',
                 },
                 rules        : {
-
-                    account_type : [
-                        { required: true, message: '请选择账户类型', trigger: 'change' }
-                    ],
-                    hospital_type: [
+                    hospital_id: [
                         { required: true, message: '请选择医院类型', trigger: 'change' }
                     ],
 
@@ -89,12 +75,11 @@
             }
         },
         methods: {
-            // https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&state={%22hospital_type%22:%22zx%22,%22account_type%22:%22xian%22}&redirect_uri=http://juliang.xahmyk.cn/api/v1/juliang/auth_code/
+            // https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&state={%22hospital_id%22:%22zx%22,%22account_type%22:%22xian%22}&redirect_uri=http://juliang.xahmyk.cn/api/v1/juliang/auth_code/
             makeUrl() {
                 let data = {
-                    hospital_type: this.form.hospital_type,
-                    account_type : this.form.account_type,
-                    app_id       : this.itemData.id,
+                    hospital_id: this.form.hospital_id,
+                    app_id     : this.itemData.id,
                 };
 
                 let dataJson = JSON.stringify(data);
