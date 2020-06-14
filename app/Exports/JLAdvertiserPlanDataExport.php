@@ -15,7 +15,7 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
         '时间',
         '广告组id',
         '广告组',
-        '展现数',
+        '展示数',
         '点击数',
         '点击率(%)',
         '平均点击单价(元)',
