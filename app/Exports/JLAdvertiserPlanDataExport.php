@@ -32,6 +32,7 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
 
     protected $selects = [
         'stat_datetime',
+        'ad_id',
         'ad_name',
         'show',
         'click',
@@ -43,6 +44,9 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
         'attribution_convert_cost',
         'convert_rate',
         'advertiser_id',
+        'deep_convert',
+        'deep_convert_cost',
+        'deep_convert_rate',
     ];
     /**
      * @var \Illuminate\Database\Eloquent\Builder|static
