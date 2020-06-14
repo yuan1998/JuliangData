@@ -31,17 +31,21 @@ class AdvertiserPlanDataExport extends ExcelExporter implements WithMapping, Wit
 
     protected $headings = [
         '时间',
-        '广告计划',
+        '广告组id',
+        '广告组',
         '展现数',
         '点击数',
-        '点击率',
-        '平均点击单价',
-        '平均千次展现费用',
+        '点击率(%)',
+        '平均点击单价(元)',
+        '平均千次展现费用(元)',
         '消耗',
         '消耗(实)',
         '转化数',
         '转化成本',
         '转化率',
+        '深度转化次数',
+        '深度转化成本',
+        '深度转化率',
     ];
 
     public function query()
@@ -55,6 +59,7 @@ class AdvertiserPlanDataExport extends ExcelExporter implements WithMapping, Wit
 
         return [
             data_get($user, 'stat_datetime'),
+            data_get($user, 'ad_id'),
             data_get($user, 'ad_name'),
             data_get($user, 'show'),
             data_get($user, 'click'),
@@ -66,6 +71,9 @@ class AdvertiserPlanDataExport extends ExcelExporter implements WithMapping, Wit
             data_get($user, 'attribution_convert'),
             data_get($user, 'attribution_convert_cost'),
             data_get($user, 'convert_rate'),
+            data_get($user, 'deep_convert'),
+            data_get($user, 'deep_convert_cost'),
+            data_get($user, 'deep_convert_rate'),
         ];
     }
 
@@ -75,6 +83,5 @@ class AdvertiserPlanDataExport extends ExcelExporter implements WithMapping, Wit
     public function title(): string
     {
         return 'Say Hi';
-        // TODO: Implement title() method.
     }
 }
