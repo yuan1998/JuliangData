@@ -83,22 +83,22 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
     {
         return $this->query->get()->map(function ($item) {
             return [
-                data_get($user, 'stat_datetime'),
-                data_get($user, 'ad_id'),
-                data_get($user, 'ad_name'),
-                data_get($user, 'show'),
-                data_get($user, 'click'),
-                data_get($user, 'ctr'),
-                data_get($user, 'avg_click_cost'),
-                data_get($user, 'avg_show_cost'),
-                data_get($user, 'cost'),
-                data_get($user, 'cost_off'),
-                data_get($user, 'attribution_convert'),
-                data_get($user, 'attribution_convert_cost'),
-                data_get($user, 'convert_rate'),
-                data_get($user, 'deep_convert'),
-                data_get($user, 'deep_convert_cost'),
-                data_get($user, 'deep_convert_rate'),
+                data_get($item, 'stat_datetime'),
+                data_get($item, 'ad_id'),
+                data_get($item, 'ad_name'),
+                data_get($item, 'show'),
+                data_get($item, 'click'),
+                data_get($item, 'ctr'),
+                data_get($item, 'avg_click_cost'),
+                data_get($item, 'avg_show_cost'),
+                data_get($item, 'cost'),
+                data_get($item, 'cost_off'),
+                data_get($item, 'attribution_convert'),
+                data_get($item, 'attribution_convert_cost'),
+                data_get($item, 'convert_rate'),
+                data_get($item, 'deep_convert'),
+                data_get($item, 'deep_convert_cost'),
+                data_get($item, 'deep_convert_rate'),
             ];
         });
     }
