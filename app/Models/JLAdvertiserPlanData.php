@@ -229,6 +229,7 @@ class JLAdvertiserPlanData extends Model
         "wifi_play_rate"                    => ["type" => "float", "comment" => "视频数据-WiFi播放占比"],
     ];
 
+
     public static $displayFields = [
         'stat_datetime'            => '时间',
         'ad_name'                  => '广告计划',
