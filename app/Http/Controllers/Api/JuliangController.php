@@ -23,20 +23,6 @@ class JuliangController extends Controller
 https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&state={"hospital_type":"zx","account_type":"xian"}&scope=%5B4%5D&redirect_uri=http%3A%2F%2Fjuliang.xahmyk.cn%2Fapi%2Fv1%2Fjuliang%2Fauth_code%2F&rid=pjud7dsb11p
      */
 
-    /**
-     * 迭代 日期范围, 在回调中传入当前日期
-     * @param array   $dates    日期范围
-     * @param Closure $callBack 回调
-     */
-    public static function dateRangeForEach($dates, Closure $callBack)
-    {
-        $date = CarbonPeriod::create($dates[0], $dates[1]);
-
-        foreach ($date as $item) {
-            $callBack($item);
-        }
-    }
-
     public function juliangAuth(Request $request)
     {
         $authCode = $request->get('auth_code', null);
@@ -52,12 +38,13 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         if (!$appModel = JLApp::find($state['app_id'])) {
             return view('juliang.auth', ['msg' => '授权错误.不存在的APP ID,请检查您的授权链接']);
         }
-        
+
         if (!HospitalType::query()->where('id', $state['hospital_id'])->exists())
             return view('juliang.auth', ['msg' => '授权错误.不存在的Hospital ID,请检查您的授权链接']);
 
 
         $json = JuliangClient::getAccessToken($authCode, $appModel);
+        var_dump($json);
 
         if ($json['code'] === 0) {
             JLAccount::makeAccount($json['data'], $state);
@@ -98,33 +85,12 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         $dates      = $request->get('dates');
         $hospitalId = $request->get('hospital_id');
 
-        $query = JLAccount::query()
-            ->where('status', 'enable')
-            ->where('hospital_id', $hospitalId);
-
-        $accountData = $query->get();
-
-        $successCount = 0;
-        $errorCount   = 0;
-        $logs         = [];
-        foreach ($accountData as $account) {
-            static::dateRangeForEach($dates, function ($str) use ($account, &$successCount, &$errorCount, &$logs) {
-                $dateString = $str->toDateString();
-                $result     = $account->getAdvertiserPlanData($dateString, $dateString);
-
-                if (Arr::get($result, 'code') == 0) {
-                    $successCount++;
-                } else {
-                    $errorCount++;
-                    array_push($logs, $result);
-                }
-            });
-        }
+        $data = JLAdvertiserPlanData::allAccountGetData($hospitalId, $dates);
 
         return response()->json([
             'code'    => 0,
-            'message' => "成功拉取账户{$successCount}个,失败账户{$errorCount}个",
-            'logs'    => $logs
+            'message' => "成功拉取账户{$data['successCount']}个,失败账户{$data['errorCount']}个",
+            'logs'    => $data['logs']
         ]);
     }
 
@@ -145,8 +111,17 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
             if (!Arr::exists(JLAdvertiserPlanData::$fields, $key)) array_push($result, $key);
         }
         dd($result);
+    }
 
+    public function fieyuClueTest(Request $request)
+    {
+        JuliangClient::testGetFeiyuClueData();
+        dd();
+        $account = JLAccount::query()->where('hospital_id', 2)
+            ->first();
 
+        $result = $account->getFeiyuClue('2020-06-24', '2020-06-24', 1);
+        dd($result);
     }
 
 }

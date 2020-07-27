@@ -23,8 +23,6 @@ class JLAdvertiserPlanDataController extends Controller
         }
 
         $query->paginate($pageSize);
-
-
     }
 
 }

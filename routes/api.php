@@ -25,6 +25,11 @@ Route::prefix('v1')
             Route::get('advertiser_plan_data_export', 'JuliangController@exportAdvertiserPlanData')->name('exportAdvertiserPlanData');
 
 
+            Route::prefix('feiyuClue')->name('feiyu.')->group(function () {
+
+                Route::get('test', 'JuliangController@fieyuClueTest')->name('test');
+
+            });
         });
 
 

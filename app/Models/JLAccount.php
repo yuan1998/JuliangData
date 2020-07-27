@@ -44,6 +44,10 @@ class JLAccount extends Model
         'kq' => '口腔医院',
     ];
 
+    /**
+     * Fix方法: 批量设置广告主的 APP_ID
+     * @param $id
+     */
     public static function setAppId($id)
     {
         static::query()
@@ -52,11 +56,19 @@ class JLAccount extends Model
             ]);
     }
 
+    /**
+     * 广告主 关联 的 APP管理
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function app()
     {
         return $this->belongsTo(JLApp::class, 'app_id', 'id');
     }
 
+    /**
+     * 获取 当前广告主 关联的 APP 配置
+     * @return array|bool
+     */
     public function getAppConfigAttribute()
     {
         $app = $this->app;
@@ -68,11 +80,19 @@ class JLAccount extends Model
         ];
     }
 
+    /**
+     * 关联 广告主 的 广告计划数据
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function advertiserPlanData()
     {
         return $this->hasMany(JLAdvertiserPlanData::class, 'advertiser_id', 'advertiser_id');
     }
 
+    /**
+     * 判断方法 : 判断 广告主 Token是否过期
+     * @return bool
+     */
     public function tokenIsExpires()
     {
         $time = Carbon::parse($this->expires_in)->addHours(-2);
@@ -81,6 +101,9 @@ class JLAccount extends Model
         return $now->gte($time);
     }
 
+    /**
+     * 刷新 广告主 账户 Token
+     */
     public function refreshToken()
     {
         $response = JuliangClient::refreshToken($this);
@@ -96,6 +119,10 @@ class JLAccount extends Model
         }
     }
 
+    /**
+     * 查看 广告主 账户 Token 是否过期.
+     * 如果过期,尝试刷新
+     */
     public function checkToken()
     {
         $test = $this->tokenIsExpires();
@@ -104,23 +131,88 @@ class JLAccount extends Model
         }
     }
 
-    public function responseCode($response, $start, $end, $page)
+    /**
+     * 获取数据方法 : 获取当前账户Model 的 飞鱼线索.
+     * @param string $start    开始时间
+     * @param string $end      结束时间
+     * @param int    $page     页数
+     * @param int    $pageSize 每页数量
+     * @return bool
+     * @throws \Exception
+     */
+    public function getFeiyuClue($start, $end, $page = 1, $pageSize = 100)
+    {
+        $this->checkToken();
+
+        $str = collect([$this->advertiser_id])->map(function ($item) {
+            return (string)$item;
+        });
+//        dd($str);
+
+        // 例:
+        $advertiser_ids = '["1667928143039496"]';
+        $start          = '2020-06-25';
+        $end            = '2020-06-25';
+        $pageSize       = 100;
+        $page           = 1;
+
+        $response = JuliangClient::getFeiyuClueData([
+            'advertiser_ids' => $advertiser_ids,
+            'start_time'     => $start,
+            'end_time'       => $end,
+            'page_size'      => $pageSize,
+            'page'           => $page
+        ], $this->access_token);
+        dd($response);
+
+        return $this->mapToResponsePageData('feiyuClue', $response, $start, $end, $page);
+    }
+
+
+    /**
+     * 处理方法 : 集中处理 返回的带页数的数据 .
+     *  目前有  : [  飞鱼线索  , 广告计划数据 ]
+     * @param $type
+     * @param $response
+     * @param $start
+     * @param $end
+     * @param $page
+     * @return bool
+     * @throws \Exception
+     */
+    public function mapToResponsePageData($type, $response, $start, $end, $page)
     {
         $code = Arr::get($response, 'code', null);
         if ($code === null) return false;
 
+
+        $ucType = ucfirst($type);
         switch ($code) {
             case 0 :
                 $data = $response['data'];
                 $list = $data['list'];
-                $this->saveResponseList($list);
+                if (method_exists($this, 'saveList' . $ucType)) {
+                    $this->{'saveList' . $ucType}($list);
+                } else {
+                    throw new \Exception("找不到 {$ucType} 的保存方法,请重新确认.");
+                }
 
                 $pageInfo = $data['page_info'];
                 if ($pageInfo['total_page'] > $page) {
-                    $this->getAdvertiserPlanData($start, $end, $page + 1);
+                    if (method_exists($this, 'get' . $ucType))
+                        $this->{'get' . $ucType}($start, $end, $page + 1);
                 }
                 return $response;
+            case 40100:
+            case 40101:
+            case 40102:
+            case 40103:
+            case 40104:
             case 40105:
+            case 40106:
+            case 40107:
+            case 40108:
+            case 40109:
                 $this->fill(['status' => 'disable']);
                 $this->update();
                 return $response;
@@ -128,9 +220,17 @@ class JLAccount extends Model
                 Log::info('无法处理的CODE码', ['code' => $code]);
                 return $response;
         }
-
     }
 
+    /**
+     * 获取当前账户Model 的 广告计划数据
+     * @param string $start    开始时间
+     * @param string $end      结束时间
+     * @param int    $page     页数
+     * @param int    $pageSize 每页数据
+     * @return bool
+     * @throws \Exception
+     */
     public function getAdvertiserPlanData($start, $end, $page = 1, $pageSize = 1000)
     {
         $this->checkToken();
@@ -144,14 +244,15 @@ class JLAccount extends Model
             'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
         ], $this->access_token);
 
-        return $this->responseCode($response, $start, $end, $page);
+        return $this->mapToResponsePageData('advertiserPlanData', $response, $start, $end, $page);
     }
 
 
     /**
-     * @param $list array
+     * 保存 广告计划数据 列表,
+     * @param $list array 广告计划数据 数组
      */
-    public function saveResponseList($list)
+    public function saveListAdvertiserPlanData($list)
     {
         $advertiser_id = $this->advertiser_id;
 
@@ -167,6 +268,21 @@ class JLAccount extends Model
         }
     }
 
+    /**
+     * save方法: 保存请求回来的 飞鱼线索
+     * @param $list array 飞鱼线索数组
+     */
+    public function saveListFieyuClue($list)
+    {
+        dd($list);
+    }
+
+    /**
+     * 解析 获取AccessToken 返回数据. 解析过期时间等
+     * @param array $data  response数据
+     * @param array $state 附加数据
+     * @return array
+     */
     public static function baseDataParser($data, $state = [])
     {
         $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
@@ -178,6 +294,12 @@ class JLAccount extends Model
         ], $state);
     }
 
+
+    /**
+     * 广告主授权成功 - 创建广告主账户
+     * @param $data  array 授权返回的数组
+     * @param $state array 附加数据
+     */
     public static function makeAccount($data, $state)
     {
         foreach ($data['advertiser_ids'] as $advertiser_id) {
@@ -194,7 +316,10 @@ class JLAccount extends Model
     }
 
 
-    public static function yesterdayPull()
+    /**
+     *  拉取昨天的 广告计划数据
+     */
+    public static function pullYesterdayAdvertiserPlanData()
     {
         $dateString = Carbon::yesterday()->toDateString();
         $accounts   = static::query()->where('status', 'enable')->get();

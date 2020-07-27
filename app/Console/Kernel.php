@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->call(function () {
-            JLAccount::yesterdayPull();
+            JLAccount::pullYesterdayAdvertiserPlanData();
         })->dailyAt('07:00');
 
     }

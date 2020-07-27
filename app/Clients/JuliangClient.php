@@ -7,6 +7,8 @@ use App\Models\JLApp;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use HttpException;
+use HttpRequest;
 
 class JuliangClient
 {
@@ -25,6 +27,9 @@ class JuliangClient
         'refresh_token'        => 'https://ad.oceanengine.com/open_api/oauth2/refresh_token/',
         'account_info'         => 'https://ad.oceanengine.com/open_api/2/user/info/',
         'advertiser_plan_data' => 'https://ad.oceanengine.com/open_api/2/report/ad/get/',
+
+        'feiyu_clue' => 'https://ad.oceanengine.com/open_api/2/tools/clue/get/',
+
     ];
 
     /**
@@ -134,6 +139,60 @@ class JuliangClient
         $conents = $result->getBody()->getContents();
 
         return json_decode($conents, true);
+
+    }
+
+
+    public static function getFeiyuClueData($data, $accessToken)
+    {
+//        dd($data);
+        $client = static::getClient();
+
+        // 测试 Query :
+        $data = [
+            'advertiser_ids' => '["1667928143039496"]',
+            "start_time"     => '2020-06-25',
+            "end_time"       => '2020-06-25',
+            "page_size"      => 100,
+            "page"           => 1,
+        ];
+
+        $response = $client->get(static::$request_url['feiyu_clue'], [
+            'form_params' => $data,
+            'headers'     => [
+                "Access-Token" => $accessToken,
+            ]
+        ]);
+        $content  = $response->getBody()->getContents();
+
+        return json_decode($content, true);
+    }
+
+    public static function testGetFeiyuClueData()
+    {
+        $request = new HttpRequest();
+        $request->setUrl('https://ad.oceanengine.com/open_api/2/tools/clue/get/');
+        $request->setMethod(HTTP_METH_GET);
+
+
+        $request->setQueryData(array(
+            'advertiser_ids' => '["1667928143039496"]',
+            'start_time'     => '2020-06-25',
+            'end_time'       => '2020-06-25'
+        ));
+
+        $request->setHeaders(array(
+            'Content-Type' => 'application/json',
+            'access_token' => 'b2a598fd16eb7f758c1a7b17a4b689355468e2e1'
+        ));
+
+        try {
+            $response = $request->send();
+            dd($response->getBody());
+            echo $response->getBody();
+        } catch (HttpException $ex) {
+            echo $ex;
+        }
 
     }
 

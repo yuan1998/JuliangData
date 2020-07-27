@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class JLAdvertiserPlanData extends Model
 {
@@ -257,5 +258,37 @@ class JLAdvertiserPlanData extends Model
         $val    = $this->cost;
         $rebate = ($accountData['rebate'] + 100) / 100;
         return round($val / $rebate, 3);
+    }
+
+
+    public static function allAccountGetData($hospitalId, $dates)
+    {
+        $query = JLAccount::query()
+            ->where('status', 'enable')
+            ->where('hospital_id', $hospitalId);
+
+        $accountData = $query->get();
+
+        $successCount = 0;
+        $errorCount   = 0;
+        $logs         = [];
+        foreach ($accountData as $account) {
+            dateRangeForEach($dates, function ($str) use ($account, &$successCount, &$errorCount, &$logs) {
+                $dateString = $str->toDateString();
+                $result     = $account->getAdvertiserPlanData($dateString, $dateString);
+
+                if (Arr::get($result, 'code') == 0) {
+                    $successCount++;
+                } else {
+                    $errorCount++;
+                    array_push($logs, $result);
+                }
+            });
+        }
+        return [
+            'logs'         => $logs,
+            'successCount' => $successCount,
+            'errorCount'   => $errorCount,
+        ];
     }
 }
