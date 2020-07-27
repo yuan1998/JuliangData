@@ -118,6 +118,8 @@ class JLAdvertiserPlanData extends Model
         "wechat",
         "wifi_play",
         "wifi_play_rate",
+        "hospital_id",
+        "account_id",
     ];
     public $timestamps = false;
 
@@ -248,7 +250,7 @@ class JLAdvertiserPlanData extends Model
 
     public function accountData()
     {
-        return $this->belongsTo(JLAccount::class, 'advertiser_id', 'advertiser_id');
+        return $this->belongsTo(JLAccount::class, 'account_id', 'id');
     }
 
     public function getCostOffAttribute()
@@ -261,12 +263,15 @@ class JLAdvertiserPlanData extends Model
         return round($val / $rebate, 3);
     }
 
-
     public static function saveAdvertiserPlanData($list, $account)
     {
         $advertiser_id = $account['advertiser_id'];
         foreach ($list as $item) {
-            $data = array_merge($item, ['advertiser_id' => $advertiser_id]);
+            $data = array_merge($item, [
+                'advertiser_id' => $advertiser_id,
+                'hospital_id'   => $account['hospital_id'],
+                'account_id'    => $account['id'],
+            ]);
             $adId = $data['ad_id'];
             $date = $data['stat_datetime'];
 

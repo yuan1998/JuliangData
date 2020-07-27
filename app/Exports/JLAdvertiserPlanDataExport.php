@@ -47,6 +47,8 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
         'deep_convert',
         'deep_convert_cost',
         'deep_convert_rate',
+        'hospital_id',
+        'account_id',
     ];
     /**
      * @var \Illuminate\Database\Eloquent\Builder|static
@@ -71,13 +73,7 @@ class JLAdvertiserPlanDataExport implements FromCollection, WithHeadings, WithSt
             ->with(['accountData'])
             ->select($this->selects)
             ->whereBetween('stat_datetime', $dates)
-            ->whereHas('accountData', function ($query) use ($hospitalId) {
-                if ($hospitalId) {
-                    $query->where('hospital_id', $hospitalId);
-                }
-            });
-
-
+            ->where('hospital_id', $hospitalId);
     }
 
     /**

@@ -274,6 +274,8 @@ class JLAccount extends Model
                 case 1 :
                     $accountList[] = [
                         'advertiser_id'   => $account->advertiser_id,
+                        'hospital_id'     => $account->hospital_id,
+                        'id'              => $account->id,
                         'advertiser_name' => $account->advertiser_name,
                         'access_token'    => $token->access_token,
                         'token'           => $token,
@@ -287,6 +289,8 @@ class JLAccount extends Model
                         foreach ($majordomoChild as $item) {
                             $accountList[] = [
                                 'advertiser_id'   => $item['advertiser_id'],
+                                'hospital_id'     => $account->hospital_id,
+                                'id'              => $account->id,
                                 'advertiser_name' => $account->advertiser_name,
                                 'access_token'    => $token->access_token,
                                 'token'           => $token,
