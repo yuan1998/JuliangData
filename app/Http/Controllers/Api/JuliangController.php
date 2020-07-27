@@ -44,39 +44,12 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
 
         $json = JuliangClient::getAccessToken($authCode, $appModel);
-        var_dump($json);
 
         if ($json['code'] === 0) {
             JLAccount::makeAccount($json['data'], $state);
             return view('juliang.auth', ['msg' => '授权成功!']);
         } else {
             return view('juliang.auth', ['msg' => $json['message']]);
-        }
-    }
-
-    public function advertiserPlanData(Request $request)
-    {
-        $startDate = $request->get('start_date');
-        $endDate   = $request->get('end_date');
-        $id        = $request->get('id');
-
-        $model = JLAccount::find($id);
-
-        if ($model) {
-            $result = $model->getAdvertiserPlanData($startDate, $endDate);
-            if ($result === false) {
-                return response()->json([
-                    'code'    => 1001,
-                    'message' => '发生错误,请联系管理员'
-                ]);
-            } else {
-                return response()->json($result);
-            }
-        } else {
-            return response()->json([
-                'code'    => 1000,
-                'message' => '错误的ID.'
-            ]);
         }
     }
 
@@ -89,8 +62,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
         return response()->json([
             'code'    => 0,
-            'message' => "成功拉取账户{$data['successCount']}个,失败账户{$data['errorCount']}个",
-            'logs'    => $data['logs']
+            'logs'    => $data,
         ]);
     }
 

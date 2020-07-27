@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Clients\JuliangClient;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -261,34 +262,73 @@ class JLAdvertiserPlanData extends Model
     }
 
 
+    public static function saveAdvertiserPlanData($list, $account)
+    {
+        $advertiser_id = $account['advertiser_id'];
+        foreach ($list as $item) {
+            $data = array_merge($item, ['advertiser_id' => $advertiser_id]);
+            $adId = $data['ad_id'];
+            $date = $data['stat_datetime'];
+
+            JLAdvertiserPlanData::updateOrCreate([
+                'ad_id'         => $adId,
+                'stat_datetime' => $date,
+            ], $data);
+        }
+    }
+
     public static function allAccountGetData($hospitalId, $dates)
     {
-        $query = JLAccount::query()
-            ->where('status', 'enable')
-            ->where('hospital_id', $hospitalId);
+        $accountList = JLAccount::getHospitalAccount($hospitalId, true);
 
-        $accountData = $query->get();
-
-        $successCount = 0;
-        $errorCount   = 0;
-        $logs         = [];
-        foreach ($accountData as $account) {
-            dateRangeForEach($dates, function ($str) use ($account, &$successCount, &$errorCount, &$logs) {
+        $logs = [
+            'success_logs' => [],
+            'error_logs'   => [],
+        ];
+        foreach ($accountList as $account) {
+            dateRangeForEach($dates, function ($str) use ($account, &$logs) {
                 $dateString = $str->toDateString();
-                $result     = $account->getAdvertiserPlanData($dateString, $dateString);
-
-                if (Arr::get($result, 'code') == 0) {
-                    $successCount++;
-                } else {
-                    $errorCount++;
-                    array_push($logs, $result);
-                }
+                $result     = static::getOneDayOfAccount($account, $dateString);
+                array_push($logs[$result ? 'success_logs' : 'error_logs'],
+                    "{$dateString} _ {$account['advertiser_name']}({$account['advertiser_id']}) ");
             });
         }
-        return [
-            'logs'         => $logs,
-            'successCount' => $successCount,
-            'errorCount'   => $errorCount,
-        ];
+
+        return $logs;
+    }
+
+    public static function getPlanDataOfDates($account, $start, $end, $page = 1, $count = 1000)
+    {
+        $token    = $account['token'];
+        $response = JuliangClient::getAdvertiserPlanData([
+            'advertiser_id' => $account['advertiser_id'],
+            'start_date'    => $start,
+            'end_date'      => $end,
+            'page_size'     => $count,
+            'page'          => $page,
+            'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
+        ], $token['access_token']);
+
+        if ($response['code'] === 0) {
+            $data = $response['data'];
+            $list = $data['list'];
+            static::saveAdvertiserPlanData($list, $account);
+
+            $pageInfo = $data['page_info'];
+            if ($pageInfo['total_page'] > $page) {
+                static::getPlanDataOfDates($account, $start, $end, $page + 1, $count);
+            }
+        } else {
+            $token->fill(['status' => 0]);
+            $token->save();
+            return false;
+        }
+
+        return true;
+    }
+
+    public static function getOneDayOfAccount($account, $day)
+    {
+        return static::getPlanDataOfDates($account, $day, $day);
     }
 }

@@ -15,18 +15,15 @@ use Illuminate\Support\Facades\Log;
 class JLAccount extends Model
 {
     protected $fillable = [
-        'refresh_token_expires_in',
-        'expires_in',
-        'access_token',
-        'refresh_token',
         'advertiser_id',
         'advertiser_name',
-        'status',
         'account_type',
         'hospital_type',
         'hospital_id',
         'comment',
         'app_id',
+        'token_id',
+        'advertiser_role',
     ];
 
     public static $statusList = [
@@ -54,6 +51,12 @@ class JLAccount extends Model
             ->update([
                 'app_id' => $id,
             ]);
+    }
+
+
+    public function token()
+    {
+        return $this->belongsTo(TokenList::class, 'token_id', 'id');
     }
 
     /**
@@ -90,45 +93,31 @@ class JLAccount extends Model
     }
 
     /**
-     * 判断方法 : 判断 广告主 Token是否过期
-     * @return bool
-     */
-    public function tokenIsExpires()
-    {
-        $time = Carbon::parse($this->expires_in)->addHours(-2);
-        $now  = Carbon::now();
-
-        return $now->gte($time);
-    }
-
-    /**
-     * 刷新 广告主 账户 Token
-     */
-    public function refreshToken()
-    {
-        $response = JuliangClient::refreshToken($this);
-
-        if ($response && $response['code'] == 0) {
-            $data     = $response['data'];
-            $baseData = static::baseDataParser($data);
-            $this->fill(array_merge($data, $baseData));
-            $this->save();
-        } else {
-            $this->fill(['status' => 'disable']);
-            $this->save();
-        }
-    }
-
-    /**
      * 查看 广告主 账户 Token 是否过期.
      * 如果过期,尝试刷新
      */
     public function checkToken()
     {
-        $test = $this->tokenIsExpires();
-        if ($test) {
-            $this->refreshToken();
+        $token = $this->token;
+
+        if ($token) {
+            $test = TokenList::tokenIsExpires($token);
+            if ($test) {
+                $token->refreshToken($this->appConfig);
+            }
         }
+
+    }
+
+    public function getMajordomoAccount()
+    {
+        $token  = $this->token;
+        $result = JuliangClient::getMajordomoAccount($this->advertiser_id, $token->access_token);
+
+        if ($result['code'] === 0) {
+            return $result['data']['list'];
+        }
+        return false;
     }
 
     /**
@@ -223,52 +212,6 @@ class JLAccount extends Model
     }
 
     /**
-     * 获取当前账户Model 的 广告计划数据
-     * @param string $start    开始时间
-     * @param string $end      结束时间
-     * @param int    $page     页数
-     * @param int    $pageSize 每页数据
-     * @return bool
-     * @throws \Exception
-     */
-    public function getAdvertiserPlanData($start, $end, $page = 1, $pageSize = 1000)
-    {
-        $this->checkToken();
-
-        $response = JuliangClient::getAdvertiserPlanData([
-            'advertiser_id' => $this->advertiser_id,
-            'start_date'    => $start,
-            'end_date'      => $end,
-            'page_size'     => $pageSize,
-            'page'          => $page,
-            'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
-        ], $this->access_token);
-
-        return $this->mapToResponsePageData('advertiserPlanData', $response, $start, $end, $page);
-    }
-
-
-    /**
-     * 保存 广告计划数据 列表,
-     * @param $list array 广告计划数据 数组
-     */
-    public function saveListAdvertiserPlanData($list)
-    {
-        $advertiser_id = $this->advertiser_id;
-
-        foreach ($list as $item) {
-            $data = array_merge($item, ['advertiser_id' => $advertiser_id]);
-            $adId = $data['ad_id'];
-            $date = $data['stat_datetime'];
-
-            JLAdvertiserPlanData::updateOrCreate([
-                'ad_id'         => $adId,
-                'stat_datetime' => $date,
-            ], $data);
-        }
-    }
-
-    /**
      * save方法: 保存请求回来的 飞鱼线索
      * @param $list array 飞鱼线索数组
      */
@@ -278,41 +221,28 @@ class JLAccount extends Model
     }
 
     /**
-     * 解析 获取AccessToken 返回数据. 解析过期时间等
-     * @param array $data  response数据
-     * @param array $state 附加数据
-     * @return array
-     */
-    public static function baseDataParser($data, $state = [])
-    {
-        $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
-        $refresh_token_expires_in = Carbon::now()->addSeconds($data['refresh_token_expires_in']);
-        return array_merge([
-            'expires_in'               => $expires_in,
-            'refresh_token_expires_in' => $refresh_token_expires_in,
-            'status'                   => 'enable',
-        ], $state);
-    }
-
-
-    /**
      * 广告主授权成功 - 创建广告主账户
      * @param $data  array 授权返回的数组
      * @param $state array 附加数据
      */
     public static function makeAccount($data, $state)
     {
-        foreach ($data['advertiser_ids'] as $advertiser_id) {
-            $baseData = static::baseDataParser($data, $state);
+        $token = TokenList::makeToken($data);
+        $app   = JLApp::find($state['app_id']);
 
-            $item = array_merge($data, $baseData, [
-                'advertiser_id' => $advertiser_id,
-            ]);
+        $info = JuliangClient::getAccountAuth($token['access_token'], $app['app_id'], $app['app_secret']);
 
-            static::updateOrCreate(['advertiser_id' => $advertiser_id], $item);
+        if ($info['code'] === 0) {
+            foreach ($info['data']['list'] as $item) {
+                $advertiser = array_merge($item, $state, [
+                    'token_id' => $token->id,
+                ]);
+
+                static::updateOrCreate([
+                    'advertiser_id' => $advertiser['advertiser_id'],
+                ], $advertiser);
+            }
         }
-
-
     }
 
 
@@ -322,10 +252,64 @@ class JLAccount extends Model
     public static function pullYesterdayAdvertiserPlanData()
     {
         $dateString = Carbon::yesterday()->toDateString();
-        $accounts   = static::query()->where('status', 'enable')->get();
-        foreach ($accounts as $account) {
-            $account->getAdvertiserPlanData($dateString, $dateString);
-        }
+        $accounts   = static::query()
+            ->with('token')
+            ->whereHas('token', function ($query) {
+                $query->where('status', 1);
+            })->get();
+
+        $accountList = static::parserAccountsToQuery($accounts);
+
+        foreach ($accountList as $account) JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString);
     }
 
+    public static function parserAccountsToQuery($accounts)
+    {
+        $accountList = [];
+        foreach ($accounts as $account) {
+            $token = $account->token;
+            if (!$token || !$token->checkToken($account->appConfig)) continue;
+
+            switch ($account['advertiser_role']) {
+                case 1 :
+                    $accountList[] = [
+                        'advertiser_id'   => $account->advertiser_id,
+                        'advertiser_name' => $account->advertiser_name,
+                        'access_token'    => $token->access_token,
+                        'token'           => $token,
+                    ];
+                    break;
+                case 2:
+
+                    $majordomoChild = $account->getMajordomoAccount($account->advertiser_id, $token->access_token);
+
+                    if ($majordomoChild) {
+                        foreach ($majordomoChild as $item) {
+                            $accountList[] = [
+                                'advertiser_id'   => $item['advertiser_id'],
+                                'advertiser_name' => $account->advertiser_name,
+                                'access_token'    => $token->access_token,
+                                'token'           => $token,
+                            ];
+                        }
+                    }
+                    break;
+            }
+
+        }
+
+        return $accountList;
+    }
+
+    public static function getHospitalAccount($id, $toList = false)
+    {
+        $accounts = JLAccount::query()
+            ->with('token')
+            ->whereHas('token', function ($query) {
+                $query->where('status', 1);
+            })->where('hospital_id', $id)->get();
+
+        return $toList ? static::parserAccountsToQuery($accounts) : $accounts;
+
+    }
 }

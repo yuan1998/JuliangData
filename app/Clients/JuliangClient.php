@@ -27,6 +27,8 @@ class JuliangClient
         'refresh_token'        => 'https://ad.oceanengine.com/open_api/oauth2/refresh_token/',
         'account_info'         => 'https://ad.oceanengine.com/open_api/2/user/info/',
         'advertiser_plan_data' => 'https://ad.oceanengine.com/open_api/2/report/ad/get/',
+        'account_auth'         => 'https://ad.oceanengine.com/open_api/oauth2/advertiser/get/',
+        'majordomo_account'    => 'https://ad.oceanengine.com/open_api/2/majordomo/advertiser/select/',
 
         'feiyu_clue' => 'https://ad.oceanengine.com/open_api/2/tools/clue/get/',
 
@@ -77,17 +79,12 @@ class JuliangClient
 
     /**
      * 刷新账户token.
-     * @param $model JLAccount 用户获取新Token的Refresh_token
+     * @param $token
+     * @param $appConfig
      * @return array|boolean
      */
-    public static function refreshToken($model)
+    public static function refreshToken($token, $appConfig)
     {
-
-        $token     = $model->refresh_token;
-        $appConfig = $model->app_config;
-
-        if (!$appConfig) return false;
-
         $result = static::getClient()->post(static::$request_url['refresh_token'], [
             'form_params' => [
                 "app_id"        => $appConfig['app_id'],
@@ -142,6 +139,20 @@ class JuliangClient
 
     }
 
+    public static function getAccountAuth($token, $appId, $appSecret)
+    {
+
+        $result = static::getClient()->get(static::$request_url['account_auth'], [
+            'form_params' => [
+                'access_token' => $token,
+                "app_id"       => $appId,
+                "secret"       => $appSecret,
+            ]
+        ]);
+        $body   = $result->getBody()->getContents();
+
+        return json_decode($body, true);
+    }
 
     public static function getFeiyuClueData($data, $accessToken)
     {
@@ -159,6 +170,21 @@ class JuliangClient
 
         $response = $client->get(static::$request_url['feiyu_clue'], [
             'form_params' => $data,
+            'headers'     => [
+                "Access-Token" => $accessToken,
+            ]
+        ]);
+        $content  = $response->getBody()->getContents();
+
+        return json_decode($content, true);
+    }
+
+    public static function getMajordomoAccount($id, $accessToken)
+    {
+        $response = static::getClient()->get(static::$request_url['majordomo_account'], [
+            'form_params' => [
+                'advertiser_id' => $id,
+            ],
             'headers'     => [
                 "Access-Token" => $accessToken,
             ]
