@@ -33,7 +33,7 @@ class JLAccountController extends AdminController
 
         $grid->fixColumns(1);
         $options = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
-        
+
         $grid->column('hospital_id', __('Hospital name'))->display(function ($val) use ($options) {
             if (!$val) return '未设置';
             return Arr::get($options, $val, '未设置');
@@ -83,7 +83,6 @@ class JLAccountController extends AdminController
     {
         $form = new Form(new JLAccount());
 
-        $form->text('status', __('Status'))->readonly();
         $form->text('advertiser_id', __('Advertiser id'))->readonly();
         $form->text('advertiser_name', __('Advertiser name'))->readonly();
         $form->divider();

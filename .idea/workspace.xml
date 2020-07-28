@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Exports/JLAdvertiserPlanDataExport.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exports/JLAdvertiserPlanDataExport.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAccount.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAccount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -108,14 +106,26 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="262" column="24" selection-start-line="262" selection-start-column="24" selection-end-line="262" selection-end-column="24" />
+            <state relative-caret-position="325">
+              <caret line="262" column="37" lean-forward="true" selection-start-line="262" selection-start-column="37" selection-end-line="262" selection-end-column="37" />
               <folding>
                 <element signature="e#30#60#0#PHP" expanded="true" />
                 <element signature="e#3029#13549#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="321">
+              <caret line="84" column="8" selection-start-line="84" selection-start-column="8" selection-end-line="84" selection-end-column="8" />
+              <folding>
+                <element signature="e#41#69#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -194,7 +204,6 @@
         <option value="$PROJECT_DIR$/resources/lang/zh-CN.json" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2020_06_12_105548_change_j_l_account_table_add_hospital_id.php" />
-        <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
         <option value="$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php" />
         <option value="$PROJECT_DIR$/resources/views/juliang/action/pullAdvertiserPlanData.blade.php" />
         <option value="$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue" />
@@ -223,6 +232,7 @@
         <option value="$PROJECT_DIR$/database/migrations/2020_07_27_162641_change_advertiser_plan_data_table_add_hospital_id.php" />
         <option value="$PROJECT_DIR$/app/Exports/JLAdvertiserPlanDataExport.php" />
         <option value="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" />
+        <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
       </list>
     </option>
   </component>
@@ -491,12 +501,12 @@
       <updated>1591508860035</updated>
       <workItem from="1591508861860" duration="57749000" />
       <workItem from="1591763671421" duration="38403000" />
-      <workItem from="1595816271927" duration="19045000" />
+      <workItem from="1595816271927" duration="19440000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115197000" />
+    <option name="totallyTimeSpent" value="115592000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1139" extended-state="0" />
@@ -518,7 +528,7 @@
       <window_info anchor="bottom" id="GraphQL" order="9" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="12" visible="true" weight="0.38622755" />
+      <window_info anchor="bottom" id="Terminal" order="12" weight="0.38622755" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -588,16 +598,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="633">
           <caret line="23" column="19" lean-forward="true" selection-start-line="23" selection-start-column="19" selection-end-line="23" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="31" column="31" lean-forward="true" selection-start-line="31" selection-start-column="31" selection-end-line="31" selection-end-column="31" />
-          <folding>
-            <element signature="e#41#69#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -869,13 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2020_07_27_162641_change_advertiser_plan_data_table_add_hospital_id.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="18" column="11" lean-forward="true" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Clients/JuliangClient.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="39">
@@ -933,13 +926,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2020_07_27_162641_change_advertiser_plan_data_table_add_hospital_id.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="407">
+          <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="262" column="24" selection-start-line="262" selection-start-column="24" selection-end-line="262" selection-end-column="24" />
+        <state relative-caret-position="325">
+          <caret line="262" column="37" lean-forward="true" selection-start-line="262" selection-start-column="37" selection-end-line="262" selection-end-column="37" />
           <folding>
             <element signature="e#30#60#0#PHP" expanded="true" />
             <element signature="e#3029#13549#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="84" column="8" selection-start-line="84" selection-start-column="8" selection-end-line="84" selection-end-column="8" />
+          <folding>
+            <element signature="e#41#69#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
