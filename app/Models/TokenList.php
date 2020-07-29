@@ -60,9 +60,8 @@ class TokenList extends Model
 
     public function refreshToken($app)
     {
-        $response = $this->refreshToken($this->refresh_token, $app);
+        $response = JuliangClient::refreshToken($this->refresh_token, $app);
 
-        var_dump($response);
         if ($response && $response['code'] == 0) {
             $data                     = $response['data'];
             $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
