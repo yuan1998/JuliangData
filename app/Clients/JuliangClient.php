@@ -47,7 +47,10 @@ class JuliangClient
             ], $headers);
 
             static::$client = new Client([
-                'defaults' => ['verify' => false],
+                'defaults' => [
+                    'verify'      => false,
+                    'http_errors' => false,
+                ],
                 'headers'  => $headers,
             ]);
 
