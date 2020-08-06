@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\JLAccount\RefreshToken;
 use App\Models\HospitalType;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -26,10 +27,16 @@ class JLAccountController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new JLAccount());
+        $grid  = new Grid(new JLAccount());
+        $model = $grid->model();
+        $model->with(['token']);
 
         $grid->disableCreateButton();
         $grid->disableExport();
+
+        $grid->actions(function ($actions) {
+            $actions->add(new RefreshToken());
+        });
 
         $grid->fixColumns(1);
         $options = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
@@ -40,7 +47,7 @@ class JLAccountController extends AdminController
         });
         $grid->column('advertiser_name', __('Advertiser name'));
         $grid->column('advertiser_id', __('Advertiser id'));
-        $grid->column('status', __('Status'))->using(JLAccount::$statusList);
+        $grid->column('token.status', __('Status'))->using(JLAccount::$statusList);
         $grid->column('rebate', __('Rebate'))->display(function ($val) {
             return $val . '%';
         });

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * @method static JLAccount updateOrCreate(array $array, array $item)
  * @method static JLAccount|null find($id)
+ * @property mixed|TokenList token
  */
 class JLAccount extends Model
 {
@@ -27,8 +28,8 @@ class JLAccount extends Model
     ];
 
     public static $statusList = [
-        'enable'  => '激活中',
-        'disable' => '禁止中,请重新授权',
+        '1' => '授权正常',
+        '0' => '授权错误,请重新授权',
     ];
 
     public static $accountTypeList = [
@@ -95,14 +96,14 @@ class JLAccount extends Model
     /**
      * 查看 广告主 账户 Token 是否过期.
      * 如果过期,尝试刷新
+     * @param bool $do
      */
-    public function checkToken()
+    public function checkToken($do = false)
     {
         $token = $this->token;
 
         if ($token) {
-            $test = TokenList::tokenIsExpires($token);
-            if ($test) {
+            if ($do || TokenList::tokenIsExpires($token)) {
                 $token->refreshToken($this->appConfig);
             }
         }
@@ -282,7 +283,6 @@ class JLAccount extends Model
                     ];
                     break;
                 case 2:
-
                     $majordomoChild = $account->getMajordomoAccount($account->advertiser_id, $token->access_token);
 
                     if ($majordomoChild) {

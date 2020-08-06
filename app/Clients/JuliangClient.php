@@ -88,14 +88,16 @@ class JuliangClient
      */
     public static function refreshToken($token, $appConfig)
     {
-        $result = static::getClient()->post(static::$request_url['refresh_token'], [
-            'form_params' => [
-                "app_id"        => $appConfig['app_id'],
-                "secret"        => $appConfig['app_secret'],
-                "grant_type"    => 'refresh_token',
-                "refresh_token" => $token,
-            ]
-        ]);
+        $result = static::getClient()
+            ->post(static::$request_url['refresh_token'], [
+                'form_params' => [
+                    "app_id"        => $appConfig['app_id'],
+                    "secret"        => $appConfig['app_secret'],
+                    "grant_type"    => 'refresh_token',
+                    "refresh_token" => $token,
+                ]
+            ]);
+
         return json_decode($result->getBody()->getContents(), true);
     }
 
@@ -145,13 +147,14 @@ class JuliangClient
     public static function getAccountAuth($token, $appId, $appSecret)
     {
 
-        $result = static::getClient()->get(static::$request_url['account_auth'], [
-            'form_params' => [
-                'access_token' => $token,
-                "app_id"       => $appId,
-                "secret"       => $appSecret,
-            ]
-        ]);
+        $result = static::getClient()
+            ->get(static::$request_url['account_auth'], [
+                'form_params' => [
+                    'access_token' => $token,
+                    "app_id"       => $appId,
+                    "secret"       => $appSecret,
+                ]
+            ]);
         $body   = $result->getBody()->getContents();
 
         return json_decode($body, true);
@@ -159,7 +162,7 @@ class JuliangClient
 
     public static function getFeiyuClueData($data, $accessToken)
     {
-//        dd($data);
+
         $client = static::getClient();
 
         // 测试 Query :
