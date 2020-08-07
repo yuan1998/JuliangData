@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Clients\JuliangClient;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -233,7 +234,6 @@ class JLAdvertiserPlanData extends Model
         "wifi_play_rate"                    => ["type" => "float", "comment" => "视频数据-WiFi播放占比"],
     ];
 
-
     public static $displayFields = [
         'stat_datetime'            => '时间',
         'ad_name'                  => '广告计划',
@@ -251,6 +251,17 @@ class JLAdvertiserPlanData extends Model
     public function accountData()
     {
         return $this->belongsTo(JLAccount::class, 'account_id', 'id');
+    }
+
+    public function scopeAdminUserHospital($query)
+    {
+        $user = Admin::user();
+        if ($user && $user->hospital()->exists()) {
+            $hospitalId = $user->hospital()->pluck('id');
+            return $query->whereIn('hospital_id', $hospitalId);
+        }
+
+        return $query;
     }
 
     public function getCostOffAttribute()

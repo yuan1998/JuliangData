@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Clients\JuliangClient;
 use Carbon\Carbon;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -54,6 +55,16 @@ class JLAccount extends Model
             ]);
     }
 
+    public function scopeAdminUserHospital($query)
+    {
+        $user = Admin::user();
+        if ($user && $user->hospital()->exists()) {
+            $hospitalId = $user->hospital()->pluck('id');
+            return $query->whereIn('hospital_id', $hospitalId);
+        }
+
+        return $query;
+    }
 
     public function token()
     {

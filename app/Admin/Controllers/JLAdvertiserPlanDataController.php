@@ -35,7 +35,9 @@ class JLAdvertiserPlanDataController extends AdminController
         $grid = new Grid(new JLAdvertiserPlanData());
         $keys = array_keys(JLAdvertiserPlanData::$displayFields);
         $grid->model()
-            ->select(array_merge($keys, ['advertiser_id', 'account_id']))->with(['accountData'])
+            ->select(array_merge($keys, ['advertiser_id', 'account_id']))
+            ->with(['accountData'])
+            ->adminUserHospital()
             ->orderBy('stat_datetime', 'desc');
         $grid->disableCreateButton();
         $grid->exporter(new AdvertiserPlanDataExport());

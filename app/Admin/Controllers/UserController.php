@@ -7,8 +7,6 @@ use Encore\Admin\Form;
 
 class UserController extends \Encore\Admin\Controllers\UserController
 {
-
-
     /**
      * Make a form builder.
      *

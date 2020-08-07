@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\HospitalType;
 use App\Models\JLAccount;
 use Encore\Admin\Controllers\AdminController;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
@@ -23,7 +24,12 @@ class JLAppController extends AdminController
 
     public function index(Content $content)
     {
-        $hospitalTypeList = HospitalType::all()->pluck('hospital_name', 'id')->toJson();
+        $user = Admin::user();
+
+        $hospitalTypeList =
+            ($user && $user->hospital()->exists())
+                ? $user->hospital()->pluck('hospital_name', 'id')->toJson()
+                : HospitalType::all()->pluck('hospital_name', 'id')->toJson();
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))

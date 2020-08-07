@@ -29,7 +29,7 @@ class JLAccountController extends AdminController
     {
         $grid  = new Grid(new JLAccount());
         $model = $grid->model();
-        $model->with(['token']);
+        $model->with(['token'])->adminUserHospital();
 
         $grid->disableCreateButton();
         $grid->disableExport();
