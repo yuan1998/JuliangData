@@ -13,6 +13,8 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
+    $router->resource('auth/users', UserController::class)
+        ->names('admin.auth.users');
 
     $router->resource('jl-accounts', "JLAccountController");
     $router->resource('jl-advertiser-plan-datas', JLAdvertiserPlanDataController::class);

@@ -35,6 +35,16 @@ class TokenList extends Model
         ]);
     }
 
+    public function checkToken($app)
+    {
+        if ($this->tokenIsExpires()) {
+            $res = $this->refreshToken($app);
+            return !($res === null);
+        }
+
+        return true;
+    }
+
     /**
      * 判断方法 : 判断 广告主 Token是否过期
      * @return bool
@@ -64,12 +74,14 @@ class TokenList extends Model
                 'status'                   => 1,
             ]));
             $this->save();
+            return $response;
 
         } else {
             $this->fill(['status' => 0]);
             $this->save();
         }
-        return $response;
+
+        return null;
     }
 
 
