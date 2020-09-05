@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\JLAccount\RefreshToken;
 use App\Models\HospitalType;
+use Carbon\Carbon;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -33,6 +34,17 @@ class JLAccountController extends AdminController
 
         $grid->disableCreateButton();
         $grid->disableExport();
+
+        $grid->filter(function ($filter) {
+            $filter->expand();
+            $filter->disableIdFilter();
+            $filter->column(1 / 2, function (Grid\Filter $filter) {
+                $options = \Encore\Admin\Facades\Admin::user()->hospital_list->pluck('hospital_name' ,'id');
+
+                $filter->equal('hospital_id', '医院类型')
+                    ->select($options);
+            });
+        });
 
         $grid->actions(function ($actions) {
             $actions->add(new RefreshToken());

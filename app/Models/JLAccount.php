@@ -58,8 +58,8 @@ class JLAccount extends Model
     public function scopeAdminUserHospital($query)
     {
         $user = Admin::user();
-        if ($user && $user->hospital()->exists()) {
-            $hospitalId = $user->hospital()->pluck('id');
+        if ($user) {
+            $hospitalId = $user->hospital_list->pluck('id');
             return $query->whereIn('hospital_id', $hospitalId);
         }
 

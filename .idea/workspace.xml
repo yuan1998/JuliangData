@@ -3,14 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAppController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAppController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Models/Administrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Models/Administrator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/JLAccount.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAccount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Buttons/ButtonGenerateAuthUrl.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Buttons/ButtonGenerateAuthUrl.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="260" column="60" selection-start-line="260" selection-start-column="60" selection-end-line="260" selection-end-column="60" />
+            <state relative-caret-position="204">
+              <caret line="259" column="5" selection-start-line="259" selection-start-column="5" selection-end-line="262" selection-end-column="9" />
               <folding>
                 <element signature="e#30#60#0#PHP" expanded="true" />
               </folding>
@@ -35,13 +29,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1369">
-              <caret line="307" column="60" lean-forward="true" selection-start-line="307" selection-start-column="44" selection-end-line="307" selection-end-column="60" />
+            <state relative-caret-position="58">
+              <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
               <folding>
-                <element signature="e#30#60#0#PHP" expanded="true" />
+                <element signature="e#41#86#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,11 +53,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="624">
-              <caret line="44" column="41" selection-start-line="44" selection-start-column="41" selection-end-line="44" selection-end-column="41" />
+            <state relative-caret-position="100">
+              <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="67" selection-end-column="11" />
               <folding>
                 <element signature="e#41#92#0#PHP" expanded="true" />
-                <element signature="e#1390#2093#2#PHP" />
               </folding>
             </state>
           </provider>
@@ -190,17 +183,17 @@
         <option value="$PROJECT_DIR$/database/migrations/2020_08_07_093042_create_admin_user_has_hospital_table.php" />
         <option value="$PROJECT_DIR$/app/Admin/routes.php" />
         <option value="$PROJECT_DIR$/app/Models/TokenList.php" />
-        <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
         <option value="$PROJECT_DIR$/config/admin.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAppController.php" />
         <option value="$PROJECT_DIR$/resources/js/components/Buttons/ButtonGenerateAuthUrl.vue" />
         <option value="$PROJECT_DIR$/database/migrations/2020_09_05_131851_change_j_l_advertiser_plan_data_table_add_rebate_spend_field.php" />
-        <option value="$PROJECT_DIR$/app/Models/JLAccount.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/UserController.php" />
         <option value="$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php" />
         <option value="$PROJECT_DIR$/app/Admin/Models/Administrator.php" />
         <option value="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" />
+        <option value="$PROJECT_DIR$/app/Models/JLAccount.php" />
+        <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
       </list>
     </option>
   </component>
@@ -497,18 +490,18 @@
       <workItem from="1591508861860" duration="57749000" />
       <workItem from="1591763671421" duration="38403000" />
       <workItem from="1595816271927" duration="51467000" />
-      <workItem from="1599275595069" duration="3887000" />
+      <workItem from="1599275595069" duration="4425000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="151506000" />
+    <option name="totallyTimeSpent" value="152044000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1139" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25773746" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25773746" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -524,7 +517,7 @@
       <window_info anchor="bottom" id="GraphQL" order="9" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="12" visible="true" weight="0.38622755" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="12" visible="true" weight="0.38622755" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -732,16 +725,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="30" column="32" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
-          <folding>
-            <element signature="e#41#86#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/encore/laravel-admin/src/Form/Field.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
@@ -852,16 +835,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1369">
-          <caret line="307" column="60" lean-forward="true" selection-start-line="307" selection-start-column="44" selection-end-line="307" selection-end-column="60" />
-          <folding>
-            <element signature="e#30#60#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Models/Administrator.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
@@ -893,13 +866,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1179">
+          <caret line="62" column="40" lean-forward="true" selection-start-line="62" selection-start-column="40" selection-end-line="62" selection-end-column="40" />
+          <folding>
+            <element signature="e#30#60#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="259" column="5" selection-start-line="259" selection-start-column="5" selection-end-line="262" selection-end-column="9" />
+          <folding>
+            <element signature="e#30#60#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="624">
-          <caret line="44" column="41" selection-start-line="44" selection-start-column="41" selection-end-line="44" selection-end-column="41" />
+        <state relative-caret-position="100">
+          <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="67" selection-end-column="11" />
           <folding>
             <element signature="e#41#92#0#PHP" expanded="true" />
-            <element signature="e#1390#2093#2#PHP" />
           </folding>
         </state>
       </provider>
@@ -911,12 +903,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php">
+    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="260" column="60" selection-start-line="260" selection-start-column="60" selection-end-line="260" selection-end-column="60" />
+        <state relative-caret-position="58">
+          <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
           <folding>
-            <element signature="e#30#60#0#PHP" expanded="true" />
+            <element signature="e#41#86#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
