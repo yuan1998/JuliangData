@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\HospitalType;
+use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 
 class UserController extends \Encore\Admin\Controllers\UserController
@@ -40,7 +41,9 @@ class UserController extends \Encore\Admin\Controllers\UserController
 
         $form->multipleSelect('roles', trans('admin.roles'))->options($roleModel::all()->pluck('name', 'id'));
         $form->multipleSelect('permissions', trans('admin.permissions'))->options($permissionModel::all()->pluck('name', 'id'));
-        $form->multipleSelect('hospital', "医院类型")->options(HospitalType::all()->pluck('hospital_name', 'id'));
+        $form->multipleSelect('hospital', "医院分类")
+            ->placeholder('选择该账户能查看到的医院数据,不选表示全部能查看')
+            ->options(HospitalType::all()->pluck('hospital_name', 'id'));
 
 
         $form->display('created_at', trans('admin.created_at'));

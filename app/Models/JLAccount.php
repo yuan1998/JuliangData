@@ -289,6 +289,7 @@ class JLAccount extends Model
                         'hospital_id'     => $account->hospital_id,
                         'id'              => $account->id,
                         'advertiser_name' => $account->advertiser_name,
+                        'rebate' => $account->rebate,
                         'access_token'    => $token->access_token,
                         'token'           => $token,
                     ];
@@ -304,6 +305,7 @@ class JLAccount extends Model
                                 'id'              => $account->id,
                                 'advertiser_name' => $account->advertiser_name,
                                 'access_token'    => $token->access_token,
+                                'rebate' => $account->rebate,
                                 'token'           => $token,
                             ];
                         }

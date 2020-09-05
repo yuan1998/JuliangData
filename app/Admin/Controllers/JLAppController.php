@@ -25,6 +25,7 @@ class JLAppController extends AdminController
     public function index(Content $content)
     {
         $user = Admin::user();
+        initVue();
 
         $hospitalTypeList =
             ($user && $user->hospital()->exists())
@@ -44,7 +45,6 @@ class JLAppController extends AdminController
      */
     protected function grid()
     {
-        initVue();
         $grid = new Grid(new JLApp());
         $grid->disableRowSelector();
         $grid->disableCreateButton();

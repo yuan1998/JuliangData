@@ -22,6 +22,8 @@ class Administrator extends Model implements AuthenticatableContract
     use HasPermissions;
     use DefaultDatetimeFormat;
 
+    private $_hospitalList;
+
     protected $fillable = ['username', 'password', 'name', 'avatar'];
 
     public function hospital()
@@ -43,6 +45,16 @@ class Administrator extends Model implements AuthenticatableContract
         $this->setTable(config('admin.database.users_table'));
 
         parent::__construct($attributes);
+    }
+
+    public function getHospitalListAttribute()
+    {
+        if (!$this->_hospitalList) {
+            $hospital            = $this->hospital();
+            $this->_hospitalList = $hospital->exists() ? $hospital : HospitalType::all();
+
+        }
+        return $this->_hospitalList;
     }
 
     /**

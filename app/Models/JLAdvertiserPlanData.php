@@ -121,6 +121,7 @@ class JLAdvertiserPlanData extends Model
         "wifi_play_rate",
         "hospital_id",
         "account_id",
+        "rebate_cost",
     ];
     public $timestamps = false;
 
@@ -256,8 +257,8 @@ class JLAdvertiserPlanData extends Model
     public function scopeAdminUserHospital($query)
     {
         $user = Admin::user();
-        if ($user && $user->hospital()->exists()) {
-            $hospitalId = $user->hospital()->pluck('id');
+        if ($user) {
+            $hospitalId = $user->hospital_list->pluck('id');
             return $query->whereIn('hospital_id', $hospitalId);
         }
 
@@ -269,22 +270,28 @@ class JLAdvertiserPlanData extends Model
         $accountData = $this->accountData;
         if (!$accountData) return '无关联账户';
 
-        $val    = $this->cost;
-        $rebate = ($accountData['rebate'] + 100) / 100;
-        return round($val / $rebate, 3);
+        if ($this->cost && !$this->rebate_cost) {
+            $val               = $this->cost;
+            $rebate            = ($accountData['rebate'] + 100) / 100;
+            $this->rebate_cost = round($val / $rebate, 3);
+            $this->save();
+        }
+        return $this->rebate_cost;
     }
 
     public static function saveAdvertiserPlanData($list, $account)
     {
         $advertiser_id = $account['advertiser_id'];
         foreach ($list as $item) {
-            $data = array_merge($item, [
+            $rebate = ($account['rebate'] + 100) / 100;
+            $data   = array_merge($item, [
                 'advertiser_id' => $advertiser_id,
                 'hospital_id'   => $account['hospital_id'],
                 'account_id'    => $account['id'],
+                'rebate_cost'   => round($item['cost'] / $rebate, 3),
             ]);
-            $adId = $data['ad_id'];
-            $date = $data['stat_datetime'];
+            $adId   = $data['ad_id'];
+            $date   = $data['stat_datetime'];
 
             JLAdvertiserPlanData::updateOrCreate([
                 'ad_id'         => $adId,

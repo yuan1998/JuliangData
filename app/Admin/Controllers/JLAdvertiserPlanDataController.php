@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Admin\Actions\PullAdvertiserPlanDataAction;
 use App\Admin\Extensions\Export\AdvertiserPlanDataExport;
+use App\Models\HospitalType;
 use Carbon\Carbon;
 use Encore\Admin\Admin;
 use Encore\Admin\Controllers\AdminController;
@@ -30,12 +31,13 @@ class JLAdvertiserPlanDataController extends AdminController
      */
     protected function grid()
     {
+
         initVue();
         disableAutocomplete();
         $grid = new Grid(new JLAdvertiserPlanData());
         $keys = array_keys(JLAdvertiserPlanData::$displayFields);
         $grid->model()
-            ->select(array_merge($keys, ['advertiser_id', 'account_id']))
+            ->select(array_merge($keys, ['advertiser_id', 'account_id', 'rebate_cost', 'id']))
             ->with(['accountData'])
             ->adminUserHospital()
             ->orderBy('stat_datetime', 'desc');
@@ -56,6 +58,12 @@ class JLAdvertiserPlanDataController extends AdminController
                 $filter->between('stat_datetime', '时间')
                     ->date()
                     ->default(['start' => $weeky, 'end' => $today]);
+            });
+            $filter->column(1 / 2, function (Grid\Filter $filter) {
+                $options = \Encore\Admin\Facades\Admin::user()->hospital_list->pluck('hospital_name' ,'id');
+
+                $filter->equal('hospital_id', '医院类型')
+                    ->select($options);
             });
         });
 

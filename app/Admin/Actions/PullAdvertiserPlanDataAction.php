@@ -28,10 +28,8 @@ class PullAdvertiserPlanDataAction extends Action
     {
         $user = Admin::user();
 
-        $hospitalTypeList =
-            ($user && $user->hospital()->exists())
-                ? $user->hospital()->pluck('hospital_name', 'id')
-                : HospitalType::all()->pluck('hospital_name', 'id')->toArray();
+        $hospitalTypeList = $user->hospital_list->pluck('hospital_name', 'id')->toArray();
+
         return view('juliang.action.pullAdvertiserPlanData', [
             'hospitalTypeList' => $hospitalTypeList,
         ]);
