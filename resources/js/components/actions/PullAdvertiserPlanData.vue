@@ -69,7 +69,16 @@
 
                 },
                 pickerOptions: {
-                    shortcuts: [ {
+                    shortcuts: [
+                        {
+                            text: '昨天!!!',
+                            onClick(picker) {
+                                const date   = new Date();
+                                date.setTime(date.getTime() - 3600 * 1000 * 24);
+                                picker.$emit('pick', [ date, date ]);
+                            }
+                        },
+                        {
                         text: '最近一周',
                         onClick(picker) {
                             const end   = new Date();

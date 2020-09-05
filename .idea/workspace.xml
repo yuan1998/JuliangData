@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAccount.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAccount.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,10 +28,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="58">
+            <state relative-caret-position="141">
               <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
               <folding>
                 <element signature="e#41#86#0#PHP" expanded="true" />
@@ -53,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="67" selection-end-column="11" />
+            <state relative-caret-position="328">
+              <caret line="47" column="44" lean-forward="true" selection-start-line="47" selection-start-column="44" selection-end-line="47" selection-end-column="44" />
               <folding>
                 <element signature="e#41#92#0#PHP" expanded="true" />
               </folding>
@@ -85,6 +84,24 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="433">
               <caret line="23" selection-start-line="23" selection-end-line="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="398">
+              <caret line="32" column="58" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -157,9 +174,7 @@
         <option value="$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2020_06_12_105548_change_j_l_account_table_add_hospital_id.php" />
         <option value="$PROJECT_DIR$/resources/views/juliang/action/pullAdvertiserPlanData.blade.php" />
-        <option value="$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue" />
         <option value="$PROJECT_DIR$/app/Http/Requests/JLAdvertiserPlanDataRequest.php" />
-        <option value="$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/resources/js/components/Modal/ModelGenerateAuthurl.vue" />
         <option value="$PROJECT_DIR$/resources/less/app.less" />
@@ -194,6 +209,8 @@
         <option value="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" />
         <option value="$PROJECT_DIR$/app/Models/JLAccount.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
+        <option value="$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue" />
+        <option value="$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue" />
       </list>
     </option>
   </component>
@@ -490,12 +507,12 @@
       <workItem from="1591508861860" duration="57749000" />
       <workItem from="1591763671421" duration="38403000" />
       <workItem from="1595816271927" duration="51467000" />
-      <workItem from="1599275595069" duration="4425000" />
+      <workItem from="1599275595069" duration="4906000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="152044000" />
+    <option name="totallyTimeSpent" value="152525000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="1139" extended-state="0" />
@@ -616,16 +633,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
           <caret line="1143" column="20" selection-start-line="1143" selection-start-column="20" selection-end-line="1143" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1276">
-          <caret line="103" column="38" selection-start-line="103" selection-start-column="38" selection-end-line="103" selection-end-column="38" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -797,9 +804,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-6486">
@@ -825,13 +829,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="258" lean-forward="true" selection-start-line="258" selection-end-line="258" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -886,16 +883,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="50" column="7" lean-forward="true" selection-start-line="50" selection-start-column="7" selection-end-line="67" selection-end-column="11" />
-          <folding>
-            <element signature="e#41#92#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Extensions/Export/AdvertiserPlanDataExport.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1736">
@@ -905,11 +892,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
+        <state relative-caret-position="141">
           <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
           <folding>
             <element signature="e#41#86#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAdvertiserPlanDataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="47" column="44" lean-forward="true" selection-start-line="47" selection-start-column="44" selection-end-line="47" selection-end-column="44" />
+          <folding>
+            <element signature="e#41#92#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/js/components/actions/PullAdvertiserPlanData.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="75" column="47" selection-start-line="72" selection-start-column="22" selection-end-line="79" selection-end-column="26" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="32" column="58" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="79" column="24" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
         </state>
       </provider>
     </entry>
