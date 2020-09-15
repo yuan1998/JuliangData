@@ -44,7 +44,10 @@ class JLAccountController extends AdminController
         $data = JLAccount::query()
             ->with([
                 'adPlanData' => function ($query) use ($dates) {
-                    $query->whereBetween('stat_datetime', $dates);
+                    $query->whereBetween('stat_datetime', [
+                        Carbon::parse($dates[0])->toDateString(),
+                        Carbon::parse($dates[1])->toDateString(),
+                    ]);
                 }
             ])
             ->whereIn('id', $accountId)
