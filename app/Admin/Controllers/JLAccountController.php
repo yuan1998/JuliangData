@@ -43,7 +43,9 @@ class JLAccountController extends AdminController
 
         $data = JLAccount::query()
             ->with([
-                'adPlanData'
+                'adPlanData' => function ($query) use ($dates) {
+                    $query->whereBetween('stat_datetime', $dates);
+                }
             ])
             ->whereIn('id', $accountId)
             ->adminUserHospital()
@@ -58,7 +60,7 @@ class JLAccountController extends AdminController
             $account['cost_off']            = round($adPlanData->sum('cost_off'), 3);
             $account['attribution_convert'] = $adPlanData->sum('attribution_convert');
 
-            $account['ctr']            = $account['show'] ? round($account['click'] / $account['show'] * 100, 3) . '%' : 0;
+            $account['ctr']           = $account['show'] ? round($account['click'] / $account['show'] * 100, 3) . '%' : 0;
             $account['avg_show_cost'] = $account['show'] ? round($account['cost'] / $account['show'] * 1000, 3) . '元' : 0;
 
 
