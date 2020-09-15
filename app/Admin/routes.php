@@ -16,6 +16,9 @@ Route::group([
     $router->resource('auth/users', UserController::class)
         ->names('admin.auth.users');
 
+    $router->get('/jl-advertiser-plan-datas/account', "JLAccountController@accountSumIndex");
+    $router->post('/jl-advertiser-plan-datas/account/list', 'JLAccountController@accountSumList');
+
     $router->resource('jl-accounts', "JLAccountController");
     $router->resource('jl-advertiser-plan-datas', JLAdvertiserPlanDataController::class);
     $router->resource('export-logs', ExportLogController::class);

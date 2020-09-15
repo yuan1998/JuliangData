@@ -66,9 +66,19 @@ class JLAccount extends Model
         return $query;
     }
 
+    public function getCommentNameAttribute()
+    {
+        return $this->advertiser_name . "(" . $this->comment . ")";
+    }
+
     public function token()
     {
         return $this->belongsTo(TokenList::class, 'token_id', 'id');
+    }
+
+    public function adPlanData()
+    {
+        return $this->hasMany(JLAdvertiserPlanData::class, 'account_id', 'id');
     }
 
     /**
@@ -289,7 +299,7 @@ class JLAccount extends Model
                         'hospital_id'     => $account->hospital_id,
                         'id'              => $account->id,
                         'advertiser_name' => $account->advertiser_name,
-                        'rebate' => $account->rebate,
+                        'rebate'          => $account->rebate,
                         'access_token'    => $token->access_token,
                         'token'           => $token,
                     ];
@@ -305,7 +315,7 @@ class JLAccount extends Model
                                 'id'              => $account->id,
                                 'advertiser_name' => $account->advertiser_name,
                                 'access_token'    => $token->access_token,
-                                'rebate' => $account->rebate,
+                                'rebate'          => $account->rebate,
                                 'token'           => $token,
                             ];
                         }

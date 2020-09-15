@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions\PullAdvertiserPlanDataAction;
 use App\Admin\Extensions\Export\AdvertiserPlanDataExport;
 use App\Models\HospitalType;
+use App\Models\JLAccount;
 use Carbon\Carbon;
 use Encore\Admin\Admin;
 use Encore\Admin\Controllers\AdminController;
@@ -34,36 +35,49 @@ class JLAdvertiserPlanDataController extends AdminController
 
         initVue();
         disableAutocomplete();
-        $grid = new Grid(new JLAdvertiserPlanData());
-        $keys = array_keys(JLAdvertiserPlanData::$displayFields);
-        $grid->model()
-            ->select(array_merge($keys, ['advertiser_id', 'account_id', 'rebate_cost', 'id']))
+        $grid      = new Grid(new JLAdvertiserPlanData());
+        $keys      = array_keys(JLAdvertiserPlanData::$displayFields);
+        $yesterday = Carbon::today()->addDays(-1)->toDateString();
+
+
+        $model = $grid->model();
+        $model->select(array_merge($keys, ['advertiser_id', 'account_id', 'rebate_cost', 'id']))
             ->with(['accountData'])
             ->adminUserHospital()
             ->orderBy('stat_datetime', 'desc');
         $grid->disableCreateButton();
         $grid->exporter(new AdvertiserPlanDataExport());
 
+        if (!request()->get('stat_datetime')) {
+            $model->whereIn('stat_datetime', [$yesterday, $yesterday]);
+        }
+
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(new PullAdvertiserPlanDataAction());
         });
 
-        $grid->filter(function ($filter) {
+        $grid->filter(function ($filter) use ($yesterday) {
             $filter->expand();
             $filter->disableIdFilter();
 
-            $filter->column(1 / 2, function (Grid\Filter $filter) {
-                $today = Carbon::today()->toDateString();
-                $weeky = Carbon::today()->addDays(-7)->toDateString();
+            $filter->column(1 / 2, function (Grid\Filter $filter) use ($yesterday) {
                 $filter->between('stat_datetime', '时间')
                     ->date()
-                    ->default(['start' => $weeky, 'end' => $today]);
+                    ->default(['start' => $yesterday, 'end' => $yesterday]);
             });
             $filter->column(1 / 2, function (Grid\Filter $filter) {
-                $options = \Encore\Admin\Facades\Admin::user()->hospital_list->pluck('hospital_name' ,'id');
+                $options = \Encore\Admin\Facades\Admin::user()->hospital_list->pluck('hospital_name', 'id');
 
                 $filter->equal('hospital_id', '医院类型')
                     ->select($options);
+
+                $accounts = JLAccount::query()
+                    ->adminUserHospital()
+                    ->get()
+                    ->pluck('comment_name', 'id');
+
+                $filter->in('account_id', '账户列表')->multipleSelect($accounts);
+
             });
         });
 
@@ -72,8 +86,14 @@ class JLAdvertiserPlanDataController extends AdminController
         $grid->disableActions();
 
         $grid->fixColumns(2);
-        foreach (JLAdvertiserPlanData::$displayFields as $field => $fieldText) {
-            $grid->column($field, $fieldText);
+        foreach (JLAdvertiserPlanData::$displayFields as $field => $fieldValue) {
+            $fieldText = $fieldValue['title'];
+
+            $column = $grid->column($field, $fieldText);
+            if (Arr::get($fieldValue, 'total', false)) {
+                $column->totalRow(Arr::get($fieldValue, 'totalRaw', null));
+            }
+
             if ($field == 'cost') {
                 $grid->column('cost_off', '消耗(实)')->display(function () {
                     return $this->cost_off;

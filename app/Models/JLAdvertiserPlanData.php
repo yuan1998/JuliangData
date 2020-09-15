@@ -236,17 +236,54 @@ class JLAdvertiserPlanData extends Model
     ];
 
     public static $displayFields = [
-        'stat_datetime'            => '时间',
-        'ad_name'                  => '广告计划',
-        'show'                     => '展现数',
-        'click'                    => '点击数',
-        'cost'                     => '消耗(虚)',
-        'ctr'                      => '点击率',
-        'avg_click_cost'           => '平均点击单价',
-        'avg_show_cost'            => '平均千次展现费用',
-        'attribution_convert'      => '转化数',
-        'attribution_convert_cost' => '转化成本',
-        'convert_rate'             => '转化率',
+        'stat_datetime'            => [
+            'title' => '时间',
+            'total' => true,
+            'totalRaw' => '合计',
+        ],
+        'ad_name'                  => [
+            'title'=>'广告计划',
+            'total' => true,
+            'totalRaw' => '-',
+        ],
+        'show'                     => [
+            'title'=>'展现数',
+            'total' => true,
+            'totalRaw' => null,
+        ],
+        'click'                    => [
+            'title'=>'点击数',
+            'total' => true,
+            'totalRaw' => null,
+        ],
+        'cost'                     => [
+            'title'=>'消耗(虚)',
+            'total' => true,
+            'totalRaw' => null,
+        ],
+        'ctr'                      => [
+            'title'=>'点击率',
+        ],
+        'avg_click_cost'           => [
+            'title'=>'平均点击单价',
+
+        ],
+        'avg_show_cost'            => [
+            'title'=>'平均千次展现费用',
+
+        ],
+        'attribution_convert'      => [
+            'title'=>'转化数',
+
+        ],
+        'attribution_convert_cost' => [
+            'title'=>'转化成本',
+
+        ],
+        'convert_rate'             => [
+            'title'=>'转化率',
+
+        ],
     ];
 
     public function accountData()
