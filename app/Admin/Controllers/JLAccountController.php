@@ -2,7 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Account\BatchReferershToken;
 use App\Admin\Actions\JLAccount\RefreshToken;
+use App\Admin\Models\Administrator;
 use App\Models\HospitalType;
 use Carbon\Carbon;
 use Encore\Admin\Controllers\AdminController;
@@ -42,9 +44,14 @@ class JLAccountController extends AdminController
         $pageSize  = request()->get('page_size', 20);
 
         $data = JLAccount::query()
+            ->select([
+                'advertiser_name',
+                'comment',
+                'id',
+            ])
             ->with([
-                'adPlanData' => function ($query) use ($dates) {
-                    $query->whereBetween('stat_datetime', [
+                'accountLog' => function ($query) use ($dates) {
+                    $query->whereBetween('log_date', [
                         Carbon::parse($dates[0])->toDateString(),
                         Carbon::parse($dates[1])->toDateString(),
                     ]);
@@ -53,6 +60,8 @@ class JLAccountController extends AdminController
             ->whereIn('id', $accountId)
             ->adminUserHospital()
             ->paginate($pageSize);
+
+        return $data;
 
         $result         = $data->toArray();
         $result['data'] = $data->map(function ($account) {
@@ -187,6 +196,10 @@ class JLAccountController extends AdminController
             });
         });
 
+        $grid->batchActions(function ($batch) {
+            $batch->disableDelete();
+            $batch->add(new BatchReferershToken());
+        });
         $grid->actions(function ($actions) {
             $actions->add(new RefreshToken());
         });
@@ -251,6 +264,8 @@ class JLAccountController extends AdminController
         $form->select('hospital_id', __('Hospital name'))->options($options);
         $form->currency('rebate', __('Rebate'))->default(0.00)->symbol('%');
         $form->text('comment', __('Comment'));
+        $form->switch('enable_robot', '消费通知')->default(1);
+        $form->number('limit_cost', '消费预警')->default(0)->min(0);
 
 
         return $form;

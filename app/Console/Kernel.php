@@ -29,11 +29,15 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             JLAccount::pullYesterdayAdvertiserPlanData();
-        })->dailyAt('07:00');
+        })->dailyAt('00:50');
+
+        $schedule->call(function () {
+            JLAccount::pullTodayAdvertiserPlanData();
+        })->everyThirtyMinutes();
 
     }
 
-    /**
+    /**2020_09_20_213334_change_account_table_add_limit_cost_field
      * Register the commands for the application.
      *
      * @return void

@@ -120,6 +120,9 @@
 
 <script>
 
+    import { round } from "../../Utils/common";
+
+    const today = new Date();
     const start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24);
 
@@ -139,7 +142,7 @@
             return {
                 form         : {
                     id       : [],
-                    dates    : [ start, start ],
+                    dates    : [ today, today ],
                     page     : 1,
                     page_size: 20,
                 },
@@ -156,6 +159,11 @@
                 isError      : false,
                 pickerOptions: {
                     shortcuts: [ {
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', [ today, today ]);
+                        }
+                    }, {
                         text: '昨天',
                         onClick(picker) {
                             picker.$emit('pick', [ start, start ]);
@@ -190,7 +198,27 @@
         },
         computed: {
             paginateData() {
-                return this.data ? this.data.data : [];
+                let data = this.data ? this.data.data : [];
+
+                data = data.map(($account) => {
+                    let $adPlanData = $account[ 'account_log' ];
+                    console.log('$adPlanData :', $adPlanData);
+                    $account[ 'show' ]     = $adPlanData.reduce((a, b) => a + b.show, 0);
+                    $account[ 'click' ]    = $adPlanData.reduce((a, b) => a + b.click, 0);
+                    $account[ 'cost' ]     = round($adPlanData.reduce((a, b) => a + b.cost, 0), 3);
+                    $account[ 'cost_off' ] = round($adPlanData.reduce((a, b) => a + b.rebate_cost, 0), 3);
+
+                    $account[ 'attribution_convert' ]      = $adPlanData.reduce((a, b) => a + b.convert, 0);
+                    $account[ 'ctr' ]                      = $account[ 'show' ] ? round($account[ 'click' ] / $account[ 'show' ] * 100, 3) + '%' : 0;
+                    $account[ 'avg_show_cost' ]            = $account[ 'show' ] ? round($account[ 'cost' ] / $account[ 'show' ] * 1000, 3) + '元' : 0;
+                    $account[ 'avg_click_cost' ]           = $account[ 'click' ] ? round($account[ 'cost' ] / $account[ 'click' ], 3) + '元' : 0;
+                    $account[ 'attribution_convert_cost' ] = $account[ 'attribution_convert' ] ? round($account[ 'cost' ] / $account[ 'attribution_convert' ], 3) + '元' : 0;
+                    $account[ 'comment_name' ]             = $account[ 'advertiser_name' ] + ($account[ 'comment' ] ? `(${ $account[ 'comment' ] })` : '');
+
+                    return $account;
+                });
+
+                return data;
             }
         },
         methods : {

@@ -29,7 +29,6 @@ SCIPRT;
 
     public function handle(JLAccount $model)
     {
-//        return $this->response()->swal()->success('刷新Token成功!');
         $token = $model->token;
 
         if (!$token)

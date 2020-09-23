@@ -36,7 +36,7 @@ class HospitalTypeController extends AdminController
         $grid->disableCreateButton();
         $grid->disableCreateButton();
 
-        
+
         $grid->column('hospital_name', __('Hospital name'));
         $grid->column('hospital_type', __('Hospital type'))->using(JLAccount::$hospitalTypeList);
         $grid->column('created_at', __('Created at'));
@@ -74,6 +74,16 @@ class HospitalTypeController extends AdminController
 
         $form->text('hospital_name', __('Hospital name'));
         $form->text('hospital_type', __('Hospital type'));
+
+
+        $form->timeRange('start_time', 'end_time', "通知时段")
+            ->default(['start' => '09:00:00', 'end' => '22:00:00']);
+
+        $options = collect(config('dingDingRobot'))->map(function ($value, $key) {
+            return $key;
+        })->toArray();
+        $form->select('robot', '预警通知机器人')
+            ->options($options);
 
         return $form;
     }

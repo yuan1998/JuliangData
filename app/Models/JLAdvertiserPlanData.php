@@ -330,10 +330,11 @@ class JLAdvertiserPlanData extends Model
             $adId   = $data['ad_id'];
             $date   = $data['stat_datetime'];
 
-            JLAdvertiserPlanData::updateOrCreate([
-                'ad_id'         => $adId,
-                'stat_datetime' => $date,
-            ], $data);
+            JLAdvertiserPlanData::query()
+                ->where('ad_id',$adId)
+                ->whereDate('stat_datetime',$date)
+                ->delete();
+            JLAdvertiserPlanData::create($data);
         }
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Admin\Models\Administrator;
 use App\Clients\JuliangClient;
 use Carbon\Carbon;
 use Encore\Admin\Facades\Admin;
@@ -26,7 +27,11 @@ class JLAccount extends Model
         'app_id',
         'token_id',
         'advertiser_role',
+        'limit_cost',
+        'cost_warning_robot',
+
     ];
+
 
     public static $statusList = [
         '1' => '授权正常',
@@ -69,6 +74,16 @@ class JLAccount extends Model
     public function getCommentNameAttribute()
     {
         return $this->advertiser_name . "(" . $this->comment . ")";
+    }
+
+    public function accountLog()
+    {
+        return $this->hasMany(AccountDataLog::class, 'account_id', 'id');
+    }
+
+    public function adminUser()
+    {
+        return $this->belongsToMany(Administrator::class, 'account_link_user', 'user_id', 'account_id');
     }
 
     public function token()
@@ -158,7 +173,6 @@ class JLAccount extends Model
         $str = collect([$this->advertiser_id])->map(function ($item) {
             return (string)$item;
         });
-//        dd($str);
 
         // 例:
         $advertiser_ids = '["1667928143039496"]';
@@ -234,15 +248,6 @@ class JLAccount extends Model
     }
 
     /**
-     * save方法: 保存请求回来的 飞鱼线索
-     * @param $list array 飞鱼线索数组
-     */
-    public function saveListFieyuClue($list)
-    {
-        dd($list);
-    }
-
-    /**
      * 广告主授权成功 - 创建广告主账户
      * @param $data  array 授权返回的数组
      * @param $state array 附加数据
@@ -267,14 +272,9 @@ class JLAccount extends Model
         }
     }
 
-
-    /**
-     *  拉取昨天的 广告计划数据
-     */
-    public static function pullYesterdayAdvertiserPlanData()
+    public static function pullAdvertiserPlanDataOfDate($dateString)
     {
-        $dateString = Carbon::yesterday()->toDateString();
-        $accounts   = static::query()
+        $accounts = static::query()
             ->with('token')
             ->whereHas('token', function ($query) {
                 $query->where('status', 1);
@@ -283,6 +283,28 @@ class JLAccount extends Model
         $accountList = static::parserAccountsToQuery($accounts);
 
         foreach ($accountList as $account) JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString);
+
+        AccountDataLog::logTodayAccountData();
+    }
+
+    public static function pullTodayAdvertiserPlanData()
+    {
+        $dateString = Carbon::today()->toDateString();
+        static::pullAdvertiserPlanDataOfDate($dateString);
+
+        if (env("ENABLE_ROBOT")) {
+            AccountDataLog::sendAccountToRobot($dateString);
+        }
+
+    }
+
+    /**
+     *  拉取昨天的 广告计划数据
+     */
+    public static function pullYesterdayAdvertiserPlanData()
+    {
+        $dateString = Carbon::yesterday()->toDateString();
+        static::pullAdvertiserPlanDataOfDate($dateString);
     }
 
     public static function parserAccountsToQuery($accounts)
@@ -337,6 +359,29 @@ class JLAccount extends Model
             })->where('hospital_id', $id)->get();
 
         return $toList ? static::parserAccountsToQuery($accounts) : $accounts;
+    }
 
+    public static function getAccountWithLogOfDate($date)
+    {
+        $hospitals = HospitalType::query()
+            ->with([
+                'account'               => function ($query) {
+                    $query->where('enable_robot', 1);
+                }, 'account.accountLog' => function ($query) use ($date) {
+                    $query->whereDate('log_date', $date);
+                }
+            ])
+            ->whereNotNull('robot')
+            ->get();
+
+        $robotList = [];
+        foreach ($hospitals as $hospital) {
+            if (!isset($robotList[$hospital['robot']])) $robotList[$hospital['robot']] = [];
+
+            if (validateInTimeRange($hospital['start_time'], $hospital['end_time']))
+                $robotList[$hospital['robot']] = $hospital['account']->merge($robotList[$hospital['robot']]);
+
+        }
+        return $robotList;
     }
 }

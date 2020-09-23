@@ -3,6 +3,7 @@
 namespace App\Admin\Models;
 
 use App\Models\HospitalType;
+use App\Models\JLAccount;
 use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -29,6 +30,11 @@ class Administrator extends Model implements AuthenticatableContract
     public function hospital()
     {
         return $this->belongsToMany(HospitalType::class, 'admin_user_has_hospital', 'admin_user_id', 'hospital_id');
+    }
+
+    public function account()
+    {
+        return $this->belongsToMany(JLAccount::class, 'account_link_user', 'account_id', 'user_id');
     }
 
     /**

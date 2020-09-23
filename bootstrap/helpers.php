@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Encore\Admin\Admin;
 
@@ -44,4 +45,25 @@ function dateRangeForEach($dates, Closure $callBack)
     foreach ($date as $item) {
         $callBack($item);
     }
+}
+
+function validateInTimeRange($start, $end, $testTime = null)
+{
+    // 获取用于对比的时间
+    $now     = $testTime ? Carbon::parse($testTime) : Carbon::now();
+    $nowTime = (int)$now->format('His');
+
+    if ($start && $start = Carbon::parse($start)) {
+        $startTime = (int)$start->format('His');
+
+        if ($startTime >= $nowTime) return false;
+    }
+
+    if ($end && $end = Carbon::parse($end)) {
+        $endTime = (int)$end->format('His');
+
+        if ($nowTime >= $endTime) return false;
+    }
+
+    return true;
 }
