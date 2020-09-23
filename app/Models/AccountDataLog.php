@@ -36,7 +36,8 @@ class AccountDataLog extends Model
         $robotList = JLAccount::getAccountWithLogOfDate($date);
 
         foreach ($robotList as $robotName => $accounts) {
-            if (!DingDingRobotClient::validateRobotName($robotName)) continue;
+
+            if (!$accounts || !DingDingRobotClient::validateRobotName($robotName)) continue;
 
             $list = collect($accounts)->map(function ($account) {
                 $account['sum'] = static::sumLogItem($account->accountLog);
