@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/Utils/common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Actions/JLAccount/RefreshToken.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Actions/JLAccount/RefreshToken.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Admin/Models/Administrator.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Admin/Models/Administrator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Console/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/HospitalType.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/HospitalType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAccount.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAccount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/JLAdvertiserPlanData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bootstrap/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/bootstrap/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/Pages/AccountPlanSum.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Pages/AccountPlanSum.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,10 +39,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/js/components/Pages/AccountPlanSum.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
+            <state relative-caret-position="277">
               <caret line="218" column="19" lean-forward="true" selection-start-line="218" selection-start-column="19" selection-end-line="218" selection-end-column="19" />
               <folding>
                 <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#1;n#el-row#0;n#el-form#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -64,19 +53,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1130">
-              <caret line="85" column="32" lean-forward="true" selection-start-line="85" selection-start-column="32" selection-end-line="85" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Models/AccountDataLog.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="605">
-              <caret line="73" column="17" lean-forward="true" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="17" />
+            <state relative-caret-position="339">
+              <caret line="35" column="42" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
               <folding>
                 <element signature="e#30#66#0#PHP" expanded="true" />
               </folding>
@@ -87,8 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="839">
-              <caret line="42" column="18" lean-forward="true" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
+            <state relative-caret-position="403">
+              <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -102,11 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="611">
-              <caret line="78" column="30" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="30" />
+            <state relative-caret-position="-1484">
+              <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
               <folding>
                 <element signature="e#30#65#0#PHP" expanded="true" />
                 <element signature="e#1774#1918#0#PHP" />
@@ -115,6 +95,27 @@
                 <element signature="e#7374#9205#0#PHP" />
                 <element signature="e#9633#10002#0#PHP" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bootstrap/helpers.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="564">
+              <caret line="58" column="18" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
+              <folding>
+                <element signature="e#7#25#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/app.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="614">
+              <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -170,7 +171,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/js/components/Modal/ModelGenerateAuthurl.vue" />
         <option value="$PROJECT_DIR$/resources/less/app.less" />
         <option value="$PROJECT_DIR$/app/Admin/Extensions/Export/AdvertiserPlanDataExport.php" />
         <option value="$PROJECT_DIR$/test.sql" />
@@ -217,10 +217,11 @@
         <option value="$PROJECT_DIR$/database/migrations/2020_09_23_143012_change_hospital_type_tbale_add_time_range.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/HospitalTypeController.php" />
         <option value="$PROJECT_DIR$/bootstrap/helpers.php" />
-        <option value="$PROJECT_DIR$/.env" />
-        <option value="$PROJECT_DIR$/app/Models/JLAccount.php" />
         <option value="$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php" />
         <option value="$PROJECT_DIR$/resources/js/components/Pages/AccountPlanSum.vue" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/config/app.php" />
+        <option value="$PROJECT_DIR$/app/Models/JLAccount.php" />
       </list>
     </option>
   </component>
@@ -532,18 +533,18 @@
       <workItem from="1595816271927" duration="51467000" />
       <workItem from="1599275595069" duration="5370000" />
       <workItem from="1600071386675" duration="17337000" />
-      <workItem from="1600506509613" duration="29194000" />
+      <workItem from="1600506509613" duration="30459000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="199520000" />
+    <option name="totallyTimeSpent" value="200785000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-160" y="-1417" width="2560" height="1417" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19610183" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19610183" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -559,7 +560,7 @@
       <window_info anchor="bottom" id="GraphQL" order="9" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="12" weight="0.30234376" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="12" visible="true" weight="0.30234376" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -717,13 +718,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/app.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="13" column="6" lean-forward="true" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/routes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="589">
@@ -862,16 +856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bootstrap/helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
-          <folding>
-            <element signature="e#7#25#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Support/helpers.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="592">
@@ -893,13 +877,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="839">
-          <caret line="42" column="18" lean-forward="true" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="506">
@@ -917,37 +894,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="611">
-          <caret line="78" column="30" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="30" />
-          <folding>
-            <element signature="e#30#65#0#PHP" expanded="true" />
-            <element signature="e#1774#1918#0#PHP" />
-            <element signature="e#1564#1668#0#PHP" />
-            <element signature="e#1674#1794#0#PHP" />
-            <element signature="e#7374#9205#0#PHP" />
-            <element signature="e#9633#10002#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Controllers/JLAccountController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="892">
           <caret line="51" column="20" lean-forward="true" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
           <folding>
             <element signature="e#41#91#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/AccountDataLog.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="605">
-          <caret line="73" column="17" lean-forward="true" selection-start-line="73" selection-start-column="17" selection-end-line="73" selection-end-column="17" />
-          <folding>
-            <element signature="e#30#66#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -961,11 +913,60 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/js/components/Pages/AccountPlanSum.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
+        <state relative-caret-position="277">
           <caret line="218" column="19" lean-forward="true" selection-start-line="218" selection-start-column="19" selection-end-line="218" selection-end-column="19" />
           <folding>
             <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#1;n#el-row#0;n#el-form#0;n#div#0;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-table#0;n#template#0;n#div#1;n#el-card#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="13" column="14" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/AccountDataLog.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="35" column="42" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
+          <folding>
+            <element signature="e#30#66#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bootstrap/helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="564">
+          <caret line="58" column="18" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
+          <folding>
+            <element signature="e#7#25#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="614">
+          <caret line="69" column="32" selection-start-line="69" selection-start-column="32" selection-end-line="69" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/JLAccount.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1484">
+          <caret line="247" column="5" selection-start-line="247" selection-start-column="5" selection-end-line="247" selection-end-column="5" />
+          <folding>
+            <element signature="e#30#65#0#PHP" expanded="true" />
+            <element signature="e#1774#1918#0#PHP" />
+            <element signature="e#1564#1668#0#PHP" />
+            <element signature="e#1674#1794#0#PHP" />
+            <element signature="e#7374#9205#0#PHP" />
+            <element signature="e#9633#10002#0#PHP" />
           </folding>
         </state>
       </provider>
