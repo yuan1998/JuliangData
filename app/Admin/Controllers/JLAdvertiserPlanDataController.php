@@ -11,6 +11,7 @@ use Encore\Admin\Admin;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
+use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use \App\Models\JLAdvertiserPlanData;
 use Illuminate\Support\Arr;
@@ -23,6 +24,36 @@ class JLAdvertiserPlanDataController extends AdminController
      * @var string
      */
     protected $title = '巨量广告计划数据';
+
+    public function advertiserProjectIndex(Content $content)
+    {
+        initVue();
+
+
+        return $content
+            ->title($this->title())
+            ->description($this->description['index'] ?? trans('admin.list'))
+            ->body("<page-advertiser-plan-data-project ></page-advertiser-plan-data-project>");
+    }
+
+    public function getAdvertiserDataList()
+    {
+        $dates    = request()->get('dates');
+
+
+        $data = JLAdvertiserPlanData::query()
+            ->select([
+                'ad_name', 'show', 'click', 'cost', 'rebate_cost', 'attribution_convert', 'stat_datetime', 'hospital_id'
+            ])
+            ->whereBetween('stat_datetime', [
+                Carbon::parse($dates[0])->toDateString(),
+                Carbon::parse($dates[1])->toDateString(),
+            ])
+            ->adminUserHospital()
+            ->get();
+
+        return $data;
+    }
 
 
     /**

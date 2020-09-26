@@ -6,6 +6,7 @@ import ExportAdvertiserPlanData from './components/actions/ExportAdvertiserPlanD
 import ModelGenerateAuthurl     from './components/Modal/ModelGenerateAuthurl';
 import ButtonGenerateAuthUrl    from './components/Buttons/ButtonGenerateAuthUrl';
 import PageAccountPlanSum       from './components/Pages/AccountPlanSum';
+import PageAdvertiserPlanDataProject       from './components/Pages/AdvertiserPlanDataProject';
 
 MyBus(Vue);
 window.Vue                           = Vue;
@@ -18,3 +19,4 @@ Vue.component('action-export-advertiser-plan-data', ExportAdvertiserPlanData);
 Vue.component('modal-generate-auth-url', ModelGenerateAuthurl);
 Vue.component('button-generate-auth-url', ButtonGenerateAuthUrl);
 Vue.component('page-account-plan-sum', PageAccountPlanSum);
+Vue.component('page-advertiser-plan-data-project', PageAdvertiserPlanDataProject);

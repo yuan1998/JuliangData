@@ -61,6 +61,7 @@ class AccountDataLog extends Model
             $cost    += $item['sum']['cost'];
             $convert += $item['sum']['convert'];
         }
+        $convert_cost = $convert ? floor($cost / $convert) : 0;
 
         return $list
             ->map(function ($item) {
@@ -74,12 +75,14 @@ class AccountDataLog extends Model
                     $cost .= "(已超额)";
                 }
 
-                return "{$name}  :   消费 {$cost} , 转化 {$convert}";
+
+                $convert_cost = $convert ? floor($cost / $convert) : 0;
+                return "{$name}  :   消费 {$cost} , 表单数 {$convert} " . ($convert_cost ? ", 表单成本 {$convert_cost}" : "");
             })
             ->filter(function ($item) {
                 return !!$item;
             })
-            ->push("合计  :  消费 {$cost} , 转化 {$convert}")
+            ->push("合计  :  消费 {$cost} , 表单数 {$convert}" . ($convert_cost ? ", 表单成本 {$convert_cost}" : ""))
             ->join("\n");
     }
 
