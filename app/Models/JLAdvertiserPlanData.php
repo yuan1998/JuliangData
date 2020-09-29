@@ -274,7 +274,7 @@ class JLAdvertiserPlanData extends Model
         ],
         'attribution_convert'      => [
             'title'=>'转化数',
-
+            'total' => true,
         ],
         'attribution_convert_cost' => [
             'title'=>'转化成本',

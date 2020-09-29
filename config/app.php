@@ -168,6 +168,7 @@ return [
         Overtrue\LaravelLang\TranslationServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Orangehill\Iseed\IseedServiceProvider::class,
+        Barryvdh\Snappy\ServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -193,7 +194,8 @@ return [
 
     'aliases' => [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 
         'App'          => Illuminate\Support\Facades\App::class,
         'Arr'          => Illuminate\Support\Arr::class,

@@ -3,8 +3,14 @@
 namespace App\Models;
 
 use App\Clients\DingDingRobotClient;
+use App\Exports\AccountCostLogExport;
+use Barryvdh\Snappy\Facades\SnappyImage;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AccountDataLog extends Model
 {
@@ -19,6 +25,8 @@ class AccountDataLog extends Model
         'log_date',
         'last_date',
     ];
+
+    public static $styles = 'table{background:white;border-radius:10px;overflow:hidden;display:inline-block}th{white-space:nowrap}thead tr{height:40px;background:#36304a}thead tr th{font-size:18px;color:#fff;line-height:1.2;font-weight:unset;padding:0 20px}tbody tr{font-size:15px;color:#444;line-height:1.2;font-weight:unset;height:40px}tbody tr td{padding:0 5px}tbody tr:nth-child(even){background-color:#f5f5f5}';
 
     public function account()
     {
@@ -45,13 +53,63 @@ class AccountDataLog extends Model
                 return $account;
             });
 
-
             $message = static::parserToMessage($list);
 
             $robot = new DingDingRobotClient($robotName);
             $robot->sendText($message);
         }
     }
+
+    public static function listToHtmlTable($list, $header = [])
+    {
+        $tHead       = "";
+        $bodyContent = collect($list)->map(function ($item) {
+            $str = collect($item)->map(function ($value ,$key) {
+                if ($key === 'limit') return '';
+                return "<td>{$value}</td>";
+            })->join('');
+
+            return "<tr>{$str}</tr>";
+        })->join('');
+        $tBody       = "<tbody>{$bodyContent}</tbody>";
+        if ($header) {
+            $headerContent = collect($header)->map(function ($value) {
+                return "<th >{$value}</th>";
+            })->join('');
+            $tHead         = "<thead><tr>{$headerContent}</tr></thead>";
+        }
+
+        return "<table cellspacing='0' cellpadding='0'>{$tHead}{$tBody}</table>";
+    }
+
+    public static function parserToArray($list)
+    {
+        return $list
+            ->filter(function ($item) {
+                $cost    = $item['sum']['cost'];
+                $convert = $item['sum']['convert'];
+
+                return !$cost == 0 && $convert == 0;
+            })
+            ->map(function ($item) {
+                $cost    = $item['sum']['cost'];
+                $convert = $item['sum']['convert'];
+                if ($cost == 0 && $convert == 0)
+                    return '';
+
+                $name = $item['comment'] ?? $item['advertiser_name'];
+
+                $convert_cost = $convert ? floor($cost / $convert) : 0;
+                return [
+                    'name'         => $name,
+                    'cost'         => $cost,
+                    'convert'      => $convert,
+                    'convert_cost' => $convert_cost,
+                    'limit'        => $item['limit_cost'] && $cost > $item['limit_cost'],
+                ];
+            });
+    }
+
 
     public static function parserToMessage($list)
     {

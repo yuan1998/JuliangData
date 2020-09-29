@@ -27,21 +27,25 @@ class JLAdvertiserPlanDataController extends AdminController
 
     public function advertiserProjectIndex(Content $content)
     {
+        $user = \Encore\Admin\Facades\Admin::user();
         initVue();
+
+        $hospitalTypeList = $user->hospital_list->pluck('hospital_name', 'id')->toJson();
 
 
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body("<page-advertiser-plan-data-project ></page-advertiser-plan-data-project>");
+            ->body("<page-advertiser-plan-data-project :hospital-list='{$hospitalTypeList}'></page-advertiser-plan-data-project>");
     }
 
     public function getAdvertiserDataList()
     {
-        $dates    = request()->get('dates');
+        $dates      = request()->get('dates');
+        $hospitalId = request()->get('hospital_id');
 
 
-        $data = JLAdvertiserPlanData::query()
+        $query = JLAdvertiserPlanData::query()
             ->select([
                 'ad_name', 'show', 'click', 'cost', 'rebate_cost', 'attribution_convert', 'stat_datetime', 'hospital_id'
             ])
@@ -49,8 +53,14 @@ class JLAdvertiserPlanDataController extends AdminController
                 Carbon::parse($dates[0])->toDateString(),
                 Carbon::parse($dates[1])->toDateString(),
             ])
-            ->adminUserHospital()
-            ->get();
+            ->adminUserHospital();
+
+        if ($hospitalId) {
+            $query->where('hospital_id', $hospitalId);
+        }
+
+
+        $data = $query->get();
 
         return $data;
     }
