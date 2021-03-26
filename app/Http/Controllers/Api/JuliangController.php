@@ -31,6 +31,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
             return view('juliang.auth', ['msg' => '授权错误.请正确操作']);
 
         $state = json_decode(request()->get('state'), true);
+        var_dump($state);
 
         if (is_array($state) && (!Arr::exists($state, 'app_id') || !Arr::exists($state, 'hospital_id')))
             return view('juliang.auth', ['msg' => '授权错误.确实正确的APP ID,请检查您的授权链接']);
@@ -44,6 +45,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
 
         $json = JuliangClient::getAccessToken($authCode, $appModel);
+        var_dump($json);
 
         if ($json['code'] === 0) {
             JLAccount::makeAccount($json['data'], $state);
@@ -61,8 +63,8 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         $data = JLAdvertiserPlanData::allAccountGetData($hospitalId, $dates);
 
         return response()->json([
-            'code'    => 0,
-            'logs'    => $data,
+            'code' => 0,
+            'logs' => $data,
         ]);
     }
 

@@ -29,7 +29,6 @@ class JLAccount extends Model
         'advertiser_role',
         'limit_cost',
         'cost_warning_robot',
-
     ];
 
 
@@ -258,6 +257,7 @@ class JLAccount extends Model
         $app   = JLApp::find($state['app_id']);
 
         $info = JuliangClient::getAccountAuth($token['access_token'], $app['app_id'], $app['app_secret']);
+        var_dump(json_encode($info));
 
         if ($info['code'] === 0) {
             foreach ($info['data']['list'] as $item) {

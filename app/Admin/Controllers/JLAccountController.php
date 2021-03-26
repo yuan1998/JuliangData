@@ -14,6 +14,7 @@ use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
 use \App\Models\JLAccount;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class JLAccountController extends AdminController
 {
@@ -51,16 +52,20 @@ class JLAccountController extends AdminController
             ])
             ->with([
                 'accountLog' => function ($query) use ($dates) {
-                    $query->whereBetween('log_date', [
-                        Carbon::parse($dates[0])->toDateString(),
-                        Carbon::parse($dates[1])->toDateString(),
+                    $query->select([
+                        'log_date',
                     ]);
+//                        ->whereBetween('log_date', [
+//                            Carbon::parse($dates[0])->toDateString(),
+//                            Carbon::parse($dates[1])->toDateString(),
+//                        ]);
                 }
             ])
             ->whereIn('id', $accountId)
             ->adminUserHospital()
             ->paginate($pageSize);
 
+        dd($accountId,$data->toArray());
         return $data;
 
         $result         = $data->toArray();
@@ -197,7 +202,7 @@ class JLAccountController extends AdminController
         });
 
         $grid->batchActions(function ($batch) {
-            $batch->disableDelete();
+//            $batch->disableDelete();
             $batch->add(new BatchReferershToken());
         });
         $grid->actions(function ($actions) {
@@ -206,6 +211,8 @@ class JLAccountController extends AdminController
 
         $grid->fixColumns(1);
         $options = HospitalType::all()->pluck('hospital_name', 'id')->toArray();
+
+        $grid->column('id', __('ID'));
 
         $grid->column('hospital_id', __('Hospital name'))->display(function ($val) use ($options) {
             if (!$val) return '未设置';
