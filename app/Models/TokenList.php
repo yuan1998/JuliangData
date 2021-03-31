@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Clients\JuliangClient;
 use Carbon\Carbon;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Database\Eloquent\Model;
 
 class TokenList extends Model
@@ -37,13 +38,14 @@ class TokenList extends Model
 
     public function checkToken($app)
     {
-        if ($this->tokenIsExpires()) {
+        if ($this->status !== 1 || $this->tokenIsExpires()) {
             $res = $this->refreshToken($app);
             return !($res === null);
         }
 
         return true;
     }
+
 
     /**
      * 判断方法 : 判断 广告主 Token是否过期
@@ -74,6 +76,7 @@ class TokenList extends Model
                 'status'                   => 1,
             ]));
             $this->save();
+
             return $response;
 
         } else {

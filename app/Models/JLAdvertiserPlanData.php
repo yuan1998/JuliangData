@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Clients\JuliangClient;
 use Encore\Admin\Facades\Admin;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -237,51 +238,51 @@ class JLAdvertiserPlanData extends Model
 
     public static $displayFields = [
         'stat_datetime'            => [
-            'title' => '时间',
-            'total' => true,
+            'title'    => '时间',
+            'total'    => true,
             'totalRaw' => '合计',
         ],
         'ad_name'                  => [
-            'title'=>'广告计划',
-            'total' => true,
+            'title'    => '广告计划',
+            'total'    => true,
             'totalRaw' => '-',
         ],
         'show'                     => [
-            'title'=>'展现数',
-            'total' => true,
+            'title'    => '展现数',
+            'total'    => true,
             'totalRaw' => null,
         ],
         'click'                    => [
-            'title'=>'点击数',
-            'total' => true,
+            'title'    => '点击数',
+            'total'    => true,
             'totalRaw' => null,
         ],
         'cost'                     => [
-            'title'=>'消耗(虚)',
-            'total' => true,
+            'title'    => '消耗(虚)',
+            'total'    => true,
             'totalRaw' => null,
         ],
         'ctr'                      => [
-            'title'=>'点击率',
+            'title' => '点击率',
         ],
         'avg_click_cost'           => [
-            'title'=>'平均点击单价',
+            'title' => '平均点击单价',
 
         ],
         'avg_show_cost'            => [
-            'title'=>'平均千次展现费用',
+            'title' => '平均千次展现费用',
 
         ],
         'attribution_convert'      => [
-            'title'=>'转化数',
+            'title' => '转化数',
             'total' => true,
         ],
         'attribution_convert_cost' => [
-            'title'=>'转化成本',
+            'title' => '转化成本',
 
         ],
         'convert_rate'             => [
-            'title'=>'转化率',
+            'title' => '转化率',
 
         ],
     ];
@@ -331,8 +332,8 @@ class JLAdvertiserPlanData extends Model
             $date   = $data['stat_datetime'];
 
             JLAdvertiserPlanData::query()
-                ->where('ad_id',$adId)
-                ->whereDate('stat_datetime',$date)
+                ->where('ad_id', $adId)
+                ->whereDate('stat_datetime', $date)
                 ->delete();
             JLAdvertiserPlanData::create($data);
         }
@@ -358,10 +359,28 @@ class JLAdvertiserPlanData extends Model
         return $logs;
     }
 
+    public static function apiPlanData($data, $token, $retry = 10)
+    {
+        try {
+            $response = JuliangClient::getAdvertiserPlanData($data, $token);
+
+            if ($response['code'] === 40000 && $retry > 0) {
+                return static::apiPlanData($data, $token, --$retry);
+            }
+            return $response;
+        } catch (RequestException $requestException) {
+            if ($retry > 0)
+                return static::apiPlanData($data, $token, --$retry);
+        }
+        return [
+            'code' => -1
+        ];
+    }
+
     public static function getPlanDataOfDates($account, $start, $end, $page = 1, $count = 1000)
     {
         $token    = $account['token'];
-        $response = JuliangClient::getAdvertiserPlanData([
+        $response = static::apiPlanData([
             'advertiser_id' => $account['advertiser_id'],
             'start_date'    => $start,
             'end_date'      => $end,
@@ -369,6 +388,7 @@ class JLAdvertiserPlanData extends Model
             'page'          => $page,
             'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
         ], $token['access_token']);
+//        dd($account['advertiser_id'], $response['code']);
 
         if ($response['code'] === 0) {
             $data = $response['data'];

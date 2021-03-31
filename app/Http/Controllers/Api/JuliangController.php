@@ -10,6 +10,7 @@ use App\Models\HospitalType;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
 use App\Models\JLApp;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Closure;
 use Illuminate\Http\Request;
@@ -84,18 +85,37 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
         foreach (JLAdvertiserPlanData::$test as $key => $value) {
             if (!Arr::exists(JLAdvertiserPlanData::$fields, $key)) array_push($result, $key);
         }
-        dd($result);
     }
 
     public function fieyuClueTest(Request $request)
     {
         JuliangClient::testGetFeiyuClueData();
-        dd();
         $account = JLAccount::query()->where('hospital_id', 2)
             ->first();
 
         $result = $account->getFeiyuClue('2020-06-24', '2020-06-24', 1);
         dd($result);
+    }
+
+    public function test()
+    {
+        $accounts = JLAccount::query()
+            ->with('token')
+            ->has('token')
+            ->limit(1)
+//            ->offset(1)
+            ->get();
+
+        $accountList = JLAccount::parserAccountsToQuery($accounts);
+        $dateString  = '2021-03-29';
+
+        foreach ($accountList as $account)
+            var_dump([
+                'name'   => $account['advertiser_name'],
+                'result' => JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString)
+            ]);
+
+        dd($accountList);
     }
 
 }

@@ -18,6 +18,7 @@ Route::prefix('v1')
     ->namespace('Api')
     ->group(function () {
         Route::prefix('juliang')->name('JL.')->group(function () {
+            Route::get('test', 'JuliangController@test')->name('test');
             Route::get('auth_code', 'JuliangController@juliangAuth')->name('authCode');
             Route::get('account_info', 'JuliangController@accountInfo')->name('accountInfo');
             Route::get('advertiser_plan_data_pull', 'JuliangController@pullAdvertiserPlanData')->name('pullAdvertiserPlanData');

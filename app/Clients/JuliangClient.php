@@ -7,6 +7,7 @@ use App\Models\JLApp;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use HttpException;
 use HttpRequest;
 
@@ -82,23 +83,32 @@ class JuliangClient
 
     /**
      * 刷新账户token.
-     * @param $token
-     * @param $appConfig
+     * @param     $token
+     * @param     $appConfig
+     * @param int $retry
      * @return array|boolean
      */
-    public static function refreshToken($token, $appConfig)
+    public static function refreshToken($token, $appConfig, $retry = 5)
     {
-        $result = static::getClient()
-            ->post(static::$request_url['refresh_token'], [
-                'form_params' => [
-                    "app_id"        => $appConfig['app_id'],
-                    "secret"        => $appConfig['app_secret'],
-                    "grant_type"    => 'refresh_token',
-                    "refresh_token" => $token,
-                ]
-            ]);
+        try {
+            $result = static::getClient()
+                ->post(static::$request_url['refresh_token'], [
+                    'form_params' => [
+                        "app_id"        => $appConfig['app_id'],
+                        "secret"        => $appConfig['app_secret'],
+                        "grant_type"    => 'refresh_token',
+                        "refresh_token" => $token,
+                    ]
+                ]);
 
-        return json_decode($result->getBody()->getContents(), true);
+            return json_decode($result->getBody()->getContents(), true);
+        } catch (RequestException $requestException) {
+            if ($retry > 0) {
+                return static::refreshToken($token, $appConfig, --$retry);
+            }
+            return false;
+        }
+
     }
 
 

@@ -65,7 +65,7 @@ class JLAccountController extends AdminController
             ->adminUserHospital()
             ->paginate($pageSize);
 
-        dd($accountId,$data->toArray());
+        dd($accountId, $data->toArray());
         return $data;
 
         $result         = $data->toArray();

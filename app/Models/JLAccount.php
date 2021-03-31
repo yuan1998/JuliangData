@@ -85,6 +85,15 @@ class JLAccount extends Model
         return $this->belongsToMany(Administrator::class, 'account_link_user', 'user_id', 'account_id');
     }
 
+    public static function getAuthAccount()
+    {
+        $accounts = static::query()
+            ->with(['token'])
+            ->has('token')
+            ->get();
+
+    }
+
     public function token()
     {
         return $this->belongsTo(TokenList::class, 'token_id', 'id');
@@ -276,9 +285,8 @@ class JLAccount extends Model
     {
         $accounts = static::query()
             ->with('token')
-            ->whereHas('token', function ($query) {
-                $query->where('status', 1);
-            })->get();
+            ->has('token')
+            ->get();
 
         $accountList = static::parserAccountsToQuery($accounts);
 
@@ -312,7 +320,12 @@ class JLAccount extends Model
         $accountList = [];
         foreach ($accounts as $account) {
             $token = $account->token;
-            if (!$token || !$token->checkToken($account->appConfig)) continue;
+            if (!$token || !$token->checkToken($account->appConfig)) {
+                Log::info('账户刷新token 错误', [
+                    'name' => $account['advertiser_name']
+                ]);
+                continue;
+            }
 
             switch ($account['advertiser_role']) {
                 case 1 :
@@ -354,9 +367,8 @@ class JLAccount extends Model
     {
         $accounts = JLAccount::query()
             ->with('token')
-            ->whereHas('token', function ($query) {
-                $query->where('status', 1);
-            })->where('hospital_id', $id)->get();
+            ->has('token')
+            ->where('hospital_id', $id)->get();
 
         return $toList ? static::parserAccountsToQuery($accounts) : $accounts;
     }
