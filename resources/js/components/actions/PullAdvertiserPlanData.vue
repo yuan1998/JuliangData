@@ -43,7 +43,7 @@
                 <el-progress :percentage="percentage"></el-progress>
                 <div>
                     <div v-for="(item,index) in resultLogs" :key="index">
-                        {{ item.date }} : {{ item.result }}
+                        {{ item.date }} : {{ item.code ? `成功${item.successCount}条;失败${item.errorCount}条;` : '获取失败!' }}
                     </div>
                 </div>
             </div>
@@ -157,7 +157,9 @@
                         this.completeCount++;
                         return {
                             date,
-                            result: res?.data?.code === 0
+                            result      : res?.data?.code === 0,
+                            errorCount  : res?.data?.logs?.error_logs?.length || 0,
+                            successCount: res?.data?.logs?.success_logs?.length || 0,
                         };
                     });
 
