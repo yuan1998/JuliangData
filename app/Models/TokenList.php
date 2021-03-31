@@ -6,6 +6,7 @@ use App\Clients\JuliangClient;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class TokenList extends Model
 {
@@ -64,6 +65,7 @@ class TokenList extends Model
     public function refreshToken($app)
     {
         $response = JuliangClient::refreshToken($this->refresh_token, $app);
+        Log::info('刷新请求结果', $response);
 
         if ($response && $response['code'] == 0) {
             $data                     = $response['data'];

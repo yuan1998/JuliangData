@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Clients\JuliangClient;
 use Encore\Admin\Facades\Admin;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
@@ -368,10 +369,15 @@ class JLAdvertiserPlanData extends Model
                 return static::apiPlanData($data, $token, --$retry);
             }
             return $response;
+        } catch (ServerException $exception) {
+            if ($retry > 0)
+                return static::apiPlanData($data, $token, --$retry);
+            
         } catch (RequestException $requestException) {
             if ($retry > 0)
                 return static::apiPlanData($data, $token, --$retry);
         }
+
         return [
             'code' => -1
         ];
