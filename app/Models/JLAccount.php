@@ -33,6 +33,7 @@ class JLAccount extends Model
 
 
     public static $statusList = [
+        '2' => '错误的Token,请重新授权',
         '1' => '授权正常',
         '0' => '授权错误,请重新授权',
     ];

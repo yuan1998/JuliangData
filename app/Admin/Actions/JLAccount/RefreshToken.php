@@ -39,14 +39,11 @@ SCIPRT;
             return $this->response()->swal()->error('刷新Token失败.App配置不存在,请确认.')->refresh();
 
         $response = $token->refreshToken($appConfig);
+        $code     = data_get($response, 'code');
+        $msg      = data_get($response, 'message', '连接服务器错误.');
 
-        if (!$response)
-            return $this->response()->swal()->error('刷新Token失败.连接巨量服务器错误,请确认.')->refresh();
-
-
-        $code = $response['code'];
-        if ($code != 0) {
-            return $this->response()->swal()->error("刷新Token失败. \n\r Code : {$code} \n\r Message : {$response['message']}")->refresh();
+        if ($code !== 0) {
+            return $this->response()->swal()->error("刷新Token失败. \n\r Code : {$code} \n\r Message : {$msg}")->refresh();
         }
         return $this->response()->swal()->success('刷新Token成功!')->refresh();
     }

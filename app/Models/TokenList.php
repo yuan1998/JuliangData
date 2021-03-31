@@ -40,8 +40,9 @@ class TokenList extends Model
     public function checkToken($app)
     {
         if ($this->status !== 1 || $this->tokenIsExpires()) {
-            $res = $this->refreshToken($app);
-            return !($res === null);
+            $res  = $this->refreshToken($app);
+            $code = data_get($res, 'code');
+            return !($code === 0);
         }
 
         return true;
@@ -66,27 +67,31 @@ class TokenList extends Model
     {
         $response = JuliangClient::refreshToken($this->refresh_token, $app);
         Log::info('刷新请求结果', $response);
+        $code = data_get($response, 'code');
 
-        if ($response && $response['code'] == 0) {
-            $data                     = $response['data'];
-            $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
-            $refresh_token_expires_in = Carbon::now()->addSeconds($data['refresh_token_expires_in']);
+        switch ($code) {
+            case 0:
+                $data                     = $response['data'];
+                $expires_in               = Carbon::now()->addSeconds($data['expires_in']);
+                $refresh_token_expires_in = Carbon::now()->addSeconds($data['refresh_token_expires_in']);
 
-            $this->fill(array_merge($data, [
-                'expires_in'               => $expires_in,
-                'refresh_token_expires_in' => $refresh_token_expires_in,
-                'status'                   => 1,
-            ]));
-            $this->save();
+                $this->fill(array_merge($data, [
+                    'expires_in'               => $expires_in,
+                    'refresh_token_expires_in' => $refresh_token_expires_in,
+                    'status'                   => 1,
+                ]));
 
-            return $response;
-
-        } else {
-            $this->fill(['status' => 0]);
-            $this->save();
+                break;
+            case 40103:
+                $this->fill(['status' => 2]);
+                break;
+            default:
+                $this->fill(['status' => 0]);
+                break;
         }
+        $this->save();
 
-        return null;
+        return $response;
     }
 
 

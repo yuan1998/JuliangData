@@ -43,14 +43,9 @@ SCIPRT;
 
 
             $response = $token->refreshToken($appConfig);
-
-            if (!$response) {
-                $error++;
-                continue;
-            }
-
-            $code = $response['code'];
-            if ($code != 0) {
+            $code     = data_get($response, 'code');
+            
+            if ($code !== 0) {
                 $error++;
                 continue;
             }
