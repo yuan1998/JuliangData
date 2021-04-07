@@ -145,19 +145,27 @@
                     .map(async (date) => {
                         console.log('date :', date);
                         this.count++;
-                        let res = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
-                            params: {
-                                ...this.form,
-                                dates: [
-                                    date,
-                                    date
-                                ]
-                            },
-                        });
+                        let error = false;
+                        try {
+                            let res = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
+                                params: {
+                                    ...this.form,
+                                    dates: [
+                                        date,
+                                        date
+                                    ]
+                                },
+                            });
+
+                        } catch (e) {
+                            error = true;
+                            console.log('e :', e, e.response);
+                        }
                         this.completeCount++;
+
                         return {
                             date,
-                            result      : res?.data?.code === 0,
+                            result      : !error ? (res?.data?.code === 0) : false,
                             errorCount  : res?.data?.logs?.error_logs?.length || 0,
                             successCount: res?.data?.logs?.success_logs?.length || 0,
                         };

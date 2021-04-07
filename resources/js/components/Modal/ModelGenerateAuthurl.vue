@@ -84,7 +84,7 @@
 
                 let dataJson = JSON.stringify(data);
 
-                return `https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=${ this.itemData.app_id }&redirect_uri=http://juliang.xahmyk.cn/api/v1/juliang/auth_code/&state=${ dataJson }`
+                return `https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=${ this.itemData.app_id }&material_auth=1&redirect_uri=http://juliang.xahmyk.cn/api/v1/juliang/auth_code/&state=${ dataJson }`
 
             },
             copyUrl() {

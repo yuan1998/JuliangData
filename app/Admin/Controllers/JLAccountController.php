@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Actions\Account\BatchReferershToken;
+use App\Admin\Actions\Account\PullData;
 use App\Admin\Actions\JLAccount\RefreshToken;
 use App\Admin\Models\Administrator;
 use App\Models\HospitalType;
@@ -207,6 +208,7 @@ class JLAccountController extends AdminController
         });
         $grid->actions(function ($actions) {
             $actions->add(new RefreshToken());
+            $actions->add(new PullData());
         });
 
         $grid->fixColumns(1);

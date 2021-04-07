@@ -64,7 +64,7 @@ class AccountDataLog extends Model
     {
         $tHead       = "";
         $bodyContent = collect($list)->map(function ($item) {
-            $str = collect($item)->map(function ($value ,$key) {
+            $str = collect($item)->map(function ($value, $key) {
                 if ($key === 'limit') return '';
                 return "<td>{$value}</td>";
             })->join('');
@@ -148,10 +148,14 @@ class AccountDataLog extends Model
     {
         $data = JLAdvertiserPlanData::query()
             ->select([
-                'id', 'account_id', 'show',
+                'id',
+                'account_id',
+                'show',
                 'click',
                 'attribution_convert',
                 'cost',
+                'cost_off',
+                'stat_datetime',
             ])
             ->with(['accountData'])
             ->whereDate('stat_datetime', $date)
