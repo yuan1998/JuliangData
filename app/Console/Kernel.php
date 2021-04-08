@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\pullAccountDataOfHospitalId;
+use App\Models\AccountDataLog;
 use App\Models\HospitalType;
 use App\Models\JLAccount;
 use Carbon\Carbon;
@@ -31,21 +32,11 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->call(function () {
-            JLAccount::pullYesterdayAdvertiserPlanData();
+            AccountDataLog::doYesterday();
         })->dailyAt('00:50');
 
         $schedule->call(function () {
-            $date  = Carbon::today()->toDateString();
-            $types = HospitalType::query()
-                ->select([
-                    'id',
-                    'robot'
-                ])
-                ->get();
-            foreach ($types as $type) {
-                pullAccountDataOfHospitalId::dispatch($type['id'], $date, !!$type['robot'])
-                    ->onQueue('test');
-            }
+            AccountDataLog::doToday();
         })->everyThirtyMinutes();
 
     }

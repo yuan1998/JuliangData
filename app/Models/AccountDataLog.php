@@ -251,4 +251,19 @@ class AccountDataLog extends Model
                 ->onQueue('test');
         }
     }
+
+    public static function doYesterday()
+    {
+        $date  = Carbon::yesterday()->toDateString();
+        $types = HospitalType::query()
+            ->select([
+                'id'
+            ])
+            ->get();
+        foreach ($types as $type) {
+            pullAccountDataOfHospitalId::dispatch($type['id'], $date)
+                ->onQueue('test');
+        }
+    }
+
 }
