@@ -48,6 +48,8 @@ class JuliangClient
             ], $headers);
 
             static::$client = new Client([
+                'timeout' => 0,
+
                 'defaults' => [
                     'verify'      => false,
                     'http_errors' => false,
@@ -81,6 +83,23 @@ class JuliangClient
         return json_decode($content, true);
     }
 
+    public static function asyncAdvertiserPlanData($client, $account, $start, $end, $page = 1, $count = 1000)
+    {
+        return $client->getAsync(static::$request_url['advertiser_plan_data'], [
+            'form_params' => [
+                'advertiser_id' => $account['advertiser_id'],
+                'start_date'    => $start,
+                'end_date'      => $end,
+                'page_size'     => $count,
+                'page'          => $page,
+                'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
+            ],
+            'headers'     => [
+                "Access-Token" => data_get($account, 'token.access_token'),
+            ]
+        ]);
+    }
+
     /**
      * 刷新账户token.
      * @param     $token
@@ -106,7 +125,10 @@ class JuliangClient
             if ($retry > 0) {
                 return static::refreshToken($token, $appConfig, --$retry);
             }
-            return false;
+            return [
+                'code' => 1,
+                'msg'  => $requestException->getMessage()
+            ];
         }
 
     }

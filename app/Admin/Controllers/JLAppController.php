@@ -31,10 +31,12 @@ class JLAppController extends AdminController
             ($user && $user->hospital()->exists())
                 ? $user->hospital()->pluck('hospital_name', 'id')->toJson()
                 : HospitalType::all()->pluck('hospital_name', 'id')->toJson();
+
+        $url = env('APP_URL');
         return $content
             ->title($this->title())
             ->description($this->description['index'] ?? trans('admin.list'))
-            ->body("<modal-generate-auth-url :hospital-type-list='{$hospitalTypeList}'>")
+            ->body("<modal-generate-auth-url base-url='{$url}' :hospital-type-list='{$hospitalTypeList}'>")
             ->body($this->grid());
     }
 

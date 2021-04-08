@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Clients\DingDingRobotClient;
 use App\Exports\AccountCostLogExport;
+use App\Jobs\pullAccountDataOfHospitalId;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -24,6 +25,9 @@ class AccountDataLog extends Model
         'rebate_cost',
         'log_date',
         'last_date',
+        'advertiser_id',
+        'advertiser_name',
+        'hospital_id',
     ];
 
     public static $styles = 'table{background:white;border-radius:10px;overflow:hidden;display:inline-block}th{white-space:nowrap}thead tr{height:40px;background:#36304a}thead tr th{font-size:18px;color:#fff;line-height:1.2;font-weight:unset;padding:0 20px}tbody tr{font-size:15px;color:#444;line-height:1.2;font-weight:unset;height:40px}tbody tr td{padding:0 5px}tbody tr:nth-child(even){background-color:#f5f5f5}';
@@ -33,25 +37,44 @@ class AccountDataLog extends Model
         return $this->belongsTo(JLAccount::class, 'account_id', 'id');
     }
 
+    public function commentName()
+    {
+        return $this->hasOne(AdvertiserNameList::class, 'advertiser_id', 'advertiser_id');
+    }
+
     public static function logTodayAccountData()
     {
         $today = Carbon::today()->toDateString();
         static::makeLogData($today);
     }
 
-    public static function sendAccountToRobot($date)
+
+    public static function sendAccountToRobot($date, $hospitalId = null)
     {
-        $robotList = JLAccount::getAccountWithLogOfDate($date);
+        $robotList = JLAccount::getAccountWithLogOfDate($date, $hospitalId);
 
         foreach ($robotList as $robotName => $accounts) {
 
             if (!$accounts || !DingDingRobotClient::validateRobotName($robotName)) continue;
 
-            $list = collect($accounts)->map(function ($account) {
-                $account['sum'] = static::sumLogItem($account->accountLog);
+            $list = [];
+            foreach ($accounts as $account) {
+//                dd('ff10' ?? data_get($account, '0.advertiser_name'));
 
-                return $account;
-            });
+                $name = data_get($account, '0.comment_name.comment') ?? data_get($account, '0.advertiser_name');
+                $val  = collect($account);
+
+                $list[$name] = [
+                    'sum' => [
+                        'show'        => $val->sum('show'),
+                        'click'       => $val->sum('click'),
+                        'cost'        => $val->sum('cost'),
+                        'convert'     => $val->sum('convert'),
+                        'rebate_cost' => $val->sum('rebate_cost'),
+                    ]
+                ];
+            }
+
 
             $message = static::parserToMessage($list);
 
@@ -113,71 +136,73 @@ class AccountDataLog extends Model
 
     public static function parserToMessage($list)
     {
-        $cost    = 0;
-        $convert = 0;
-        foreach ($list as $item) {
-            $cost    += $item['sum']['cost'];
-            $convert += $item['sum']['convert'];
+        $result       = [];
+        $totalCost    = 0;
+        $totalConvert = 0;
+        foreach ($list as $name => $item) {
+            $cost    = data_get($item, 'sum.cost', 0);
+            $convert = data_get($item, 'sum.convert', 0);
+            if ($cost == 0 && $convert == 0)
+                continue;
+
+            $totalCost    += $cost;
+            $totalConvert += $convert;
+            $convertCost  = $convert ? floor($cost / $convert) : 0;
+
+            array_push($result, "{$name}  :   消费 {$cost} , 表单数 {$convert} " . ($convertCost ? ", 表单成本 {$convertCost}" : ""));
         }
-        $convert_cost = $convert ? floor($cost / $convert) : 0;
-
-        return $list
-            ->map(function ($item) {
-                $cost    = $item['sum']['cost'];
-                $convert = $item['sum']['convert'];
-                if ($cost == 0 && $convert == 0)
-                    return '';
-
-                $name = $item['comment'] ?? $item['advertiser_name'];
-                if ($item['limit_cost'] && $cost > $item['limit_cost']) {
-                    $cost .= "(已超额)";
-                }
-
-
-                $convert_cost = $convert ? floor($cost / $convert) : 0;
-                return "{$name}  :   消费 {$cost} , 表单数 {$convert} " . ($convert_cost ? ", 表单成本 {$convert_cost}" : "");
-            })
-            ->filter(function ($item) {
-                return !!$item;
-            })
-            ->push("合计  :  消费 {$cost} , 表单数 {$convert}" . ($convert_cost ? ", 表单成本 {$convert_cost}" : ""))
-            ->join("\n");
+        $totalConvertCost = $totalConvert ? floor($totalCost / $totalConvert) : 0;
+        array_push($result, "合计  :  消费 {$totalCost} , 表单数 {$totalConvert}" . ($totalConvertCost ? ", 表单成本 {$totalConvertCost}" : ""));
+        return implode("\n", $result);
     }
 
-    public static function makeLogData($date)
+    public static function makeLogData($date, $queryCall = null)
     {
-        $data = JLAdvertiserPlanData::query()
+        $query = JLAdvertiserPlanData::query()
             ->select([
                 'id',
+                'advertiser_id',
+                'advertiser_name',
                 'account_id',
+                'hospital_id',
                 'show',
                 'click',
                 'attribution_convert',
                 'cost',
-                'cost_off',
+                'rebate_cost',
                 'stat_datetime',
             ])
-            ->with(['accountData'])
-            ->whereDate('stat_datetime', $date)
-            ->get()
-            ->groupBy('account_id');
+            ->whereDate('stat_datetime', $date);
+
+        if (is_callable($queryCall)) {
+            $queryCall($query);
+        }
+
+        $data = $query->get()
+            ->groupBy('advertiser_name');
+//        dd($data->toArray());
 
         $now = Carbon::now()->toDateTimeString();
         foreach ($data as $accountId => $planData) {
 
-            $model = [
-                'show'        => $planData->sum('show'),
-                'click'       => $planData->sum('click'),
-                'cost'        => $planData->sum('cost'),
-                'convert'     => $planData->sum('attribution_convert'),
-                'rebate_cost' => $planData->sum('cost_off'),
-                'account_id'  => $accountId,
-                'last_date'   => $now,
-                'log_date'    => $date,
+
+            $advertiserId = data_get($planData, '0.advertiser_id');
+            $model        = [
+                'show'            => $planData->sum('show'),
+                'click'           => $planData->sum('click'),
+                'cost'            => $planData->sum('cost'),
+                'convert'         => $planData->sum('attribution_convert'),
+                'rebate_cost'     => $planData->sum('rebate_cost'),
+                'hospital_id'     => data_get($planData, '0.hospital_id'),
+                'advertiser_id'   => $advertiserId,
+                'advertiser_name' => data_get($planData, '0.advertiser_name'),
+                'account_id'      => data_get($planData, '0.account_id'),
+                'last_date'       => $now,
+                'log_date'        => $date,
             ];
 
             static::query()
-                ->where('account_id', $accountId)
+                ->where('advertiser_id', $advertiserId)
                 ->whereDate('log_date', $date)
                 ->delete();
             static::create($model);
@@ -210,5 +235,20 @@ class AccountDataLog extends Model
 
         AccountDataLog::sendAccountToRobot($dateString);
 
+    }
+
+    public static function doToday()
+    {
+        $date  = Carbon::today()->toDateString();
+        $types = HospitalType::query()
+            ->select([
+                'id',
+                'robot'
+            ])
+            ->get();
+        foreach ($types as $type) {
+            pullAccountDataOfHospitalId::dispatch($type['id'], $date, !!$type['robot'])
+                ->onQueue('test');
+        }
     }
 }

@@ -6,14 +6,19 @@ use App\Clients\JuliangClient;
 use Encore\Admin\Facades\Admin;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Pool;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Promise;
+
 
 class JLAdvertiserPlanData extends Model
 {
 
     protected $fillable = [
         'advertiser_id',
+        'advertiser_name',
         "active",
         "active_cost",
         "interact_per_cost",
@@ -307,7 +312,7 @@ class JLAdvertiserPlanData extends Model
     public function getCostOffAttribute()
     {
         $accountData = $this->accountData;
-        if (!$accountData) return '无关联账户';
+        if (!$accountData) return 0;
 
         if ($this->cost && !$this->rebate_cost) {
             $val               = $this->cost;
@@ -325,6 +330,7 @@ class JLAdvertiserPlanData extends Model
             $rebate = ($account['rebate'] + 100) / 100;
             $data   = array_merge($item, [
                 'advertiser_id' => $advertiser_id,
+                'advertiser_name' => $account['advertiser_name'],
                 'hospital_id'   => $account['hospital_id'],
                 'account_id'    => $account['id'],
                 'rebate_cost'   => round($item['cost'] / $rebate, 3),
@@ -372,7 +378,7 @@ class JLAdvertiserPlanData extends Model
         } catch (ServerException $exception) {
             if ($retry > 0)
                 return static::apiPlanData($data, $token, --$retry);
-            
+
         } catch (RequestException $requestException) {
             if ($retry > 0)
                 return static::apiPlanData($data, $token, --$retry);
@@ -418,4 +424,51 @@ class JLAdvertiserPlanData extends Model
     {
         return static::getPlanDataOfDates($account, $day, $day);
     }
+
+
+    public static function concurrentAccountData($accounts, $date)
+    {
+        $client = JuliangClient::getClient();
+
+        $requests = function ($accounts, $date) {
+            foreach ($accounts as $account) {
+                yield new Request('GET', JuliangClient::$request_url['advertiser_plan_data'], [
+                    "Access-Token" => data_get($account, 'token.access_token'),
+                ], json_encode([
+                    'advertiser_id' => $account['advertiser_id'],
+                    'start_date'    => $date,
+                    'end_date'      => $date,
+                    'page_size'     => 1000,
+                    'page'          => 1,
+                    'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
+                ]));
+            }
+        };
+
+        $pool = new Pool($client, $requests($accounts, $date), [
+            'concurrency' => 5,
+            'fulfilled'   => function ($response, $index) use ($accounts) {
+                $content  = $response->getBody()->getContents();
+                $jsonData = json_decode($content, true);
+                $code     = data_get($jsonData, 'code');
+                if ($code === 0) {
+                    $list    = data_get($jsonData, 'data.list');
+                    $account = $accounts[$index];
+                    static::saveAdvertiserPlanData($list, $account);
+                } else {
+                    var_dump($content);
+                }
+                // this is delivered each successful response
+            },
+            'rejected'    => function ($reason, $index) {
+                // this is delivered each failed request
+            },
+        ]);
+
+        $promise = $pool->promise();
+// Force the pool of requests to complete.
+        $promise->wait();
+//        dd($responses);
+    }
+
 }

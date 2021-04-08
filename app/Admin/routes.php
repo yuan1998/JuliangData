@@ -22,7 +22,7 @@ Route::group([
     $router->get('/jl-advertiser-plan-datas/account', "JLAccountController@accountSumIndex");
     $router->post('/jl-advertiser-plan-datas/account/list', 'JLAccountController@accountSumList');
 
-
+    $router->resource('advertiser-name-lists', AdvertiserNameListController::class);
     $router->resource('jl-accounts', "JLAccountController");
     $router->resource('jl-advertiser-plan-datas', "JLAdvertiserPlanDataController");
     $router->resource('export-logs', ExportLogController::class);

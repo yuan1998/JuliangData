@@ -2,7 +2,10 @@
 
 namespace App\Console;
 
+use App\Jobs\pullAccountDataOfHospitalId;
+use App\Models\HospitalType;
 use App\Models\JLAccount;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +35,17 @@ class Kernel extends ConsoleKernel
         })->dailyAt('00:50');
 
         $schedule->call(function () {
-            JLAccount::pullTodayAdvertiserPlanData();
+            $date  = Carbon::today()->toDateString();
+            $types = HospitalType::query()
+                ->select([
+                    'id',
+                    'robot'
+                ])
+                ->get();
+            foreach ($types as $type) {
+                pullAccountDataOfHospitalId::dispatch($type['id'], $date, !!$type['robot'])
+                    ->onQueue('test');
+            }
         })->everyThirtyMinutes();
 
     }

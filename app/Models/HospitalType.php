@@ -12,6 +12,12 @@ class HospitalType extends Model
         return $this->hasMany(JLAccount::class, 'hospital_id', 'id');
     }
 
+    public function accountDataLog()
+    {
+        return $this->hasMany(AccountDataLog::class, 'hospital_id', 'id');
+    }
+
+
 
 //    public function getRobotAttribute($value)
 //    {

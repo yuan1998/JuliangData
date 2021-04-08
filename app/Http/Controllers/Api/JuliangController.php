@@ -6,6 +6,8 @@ use App\Clients\JuliangClient;
 use App\Exports\JLAdvertiserPlanDataExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JLAdvertiserPlanDataRequest;
+use App\Jobs\pullAccountDataOfHospitalId;
+use App\Models\AccountDataLog;
 use App\Models\HospitalType;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
@@ -99,15 +101,40 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 
     public function test()
     {
+//        $data = JLAccount::pullTodayAdvertiserPlanData();
+
+        $dateString = Carbon::today()->toDateString();
+//        $types = HospitalType::query()
+//            ->select([
+//                'id',
+//                'robot'
+//            ])
+//            ->get();
+//        foreach ($types as $type) {
+//            pullAccountDataOfHospitalId::dispatch($type['id'], $date, !!$type['robot']);
+//        }
+
+//        $dateString  = '2021-04-08';
+//        $d = pullAccountDataOfHospitalId::dispatch(3, $dateString, true)->onQueue('test');
+        AccountDataLog::doToday();
+        dd(123);
+        AccountDataLog::sendAccountToRobot($dateString, 3);
+
+//        AccountDataLog::makeLogData($dateString);
+        dd(123);
         $accounts = JLAccount::query()
             ->with('token')
             ->has('token')
-            ->limit(1)
+            ->where('id', 225)
+//            ->limit(1)
 //            ->offset(1)
             ->get();
 
+//        dd($accounts);
         $accountList = JLAccount::parserAccountsToQuery($accounts);
-        $dateString  = '2021-03-29';
+
+
+        dd($accountList);
 
         foreach ($accountList as $account)
             var_dump([
@@ -115,7 +142,8 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
                 'result' => JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString)
             ]);
 
-        dd($accountList);
+
+        dd(123);
     }
 
 }

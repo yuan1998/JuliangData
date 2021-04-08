@@ -284,14 +284,11 @@ class JLAccount extends Model
 
     public static function pullAdvertiserPlanDataOfDate($dateString)
     {
-        $accounts = static::query()
-            ->with('token')
-            ->has('token')
-            ->get();
+        $accountList = static::getHospitalAccount([3], true);
+//        dd($accountList);
+        JLAdvertiserPlanData::concurrentAccountData($accountList, $dateString);
 
-        $accountList = static::parserAccountsToQuery($accounts);
-
-        foreach ($accountList as $account) JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString);
+//        foreach ($accountList as $account) JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString);
 
         AccountDataLog::logTodayAccountData();
     }
@@ -349,7 +346,7 @@ class JLAccount extends Model
                                 'advertiser_id'   => $item['advertiser_id'],
                                 'hospital_id'     => $account->hospital_id,
                                 'id'              => $account->id,
-                                'advertiser_name' => $account->advertiser_name,
+                                'advertiser_name' => $item['advertiser_name'],
                                 'access_token'    => $token->access_token,
                                 'rebate'          => $account->rebate,
                                 'token'           => $token,
@@ -360,6 +357,7 @@ class JLAccount extends Model
             }
 
         }
+        AdvertiserNameList::makeList($accountList);
 
         return $accountList;
     }
@@ -369,31 +367,43 @@ class JLAccount extends Model
         $accounts = JLAccount::query()
             ->with('token')
             ->has('token')
-            ->where('hospital_id', $id)->get();
+            ->whereIn('hospital_id', (array)$id)->get();
 
         return $toList ? static::parserAccountsToQuery($accounts) : $accounts;
     }
 
-    public static function getAccountWithLogOfDate($date)
+    /**
+     * @param      $date
+     * @param null $hospitalId
+     * @return array
+     */
+    public static function getAccountWithLogOfDate($date, $hospitalId = null)
     {
-        $hospitals = HospitalType::query()
+        $query = HospitalType::query()
             ->with([
-                'account'               => function ($query) {
-                    $query->where('enable_robot', 1);
-                }, 'account.accountLog' => function ($query) use ($date) {
+                'accountDataLog' => function ($query) use ($date) {
                     $query->whereDate('log_date', $date);
-                }
+                },
+                'accountDataLog.commentName'
             ])
-            ->whereNotNull('robot')
-            ->get();
+            ->whereNotNull('robot');
+        if ($hospitalId) {
+            $query->where('id', $hospitalId);
+        }
+
+        $hospitals = $query->get();
 
         $robotList = [];
         foreach ($hospitals as $hospital) {
-            if (!isset($robotList[$hospital['robot']])) $robotList[$hospital['robot']] = [];
+            $robot = $hospital['robot'];
 
-            if (validateInTimeRange($hospital['start_time'], $hospital['end_time']))
-                $robotList[$hospital['robot']] = $hospital['account']->merge($robotList[$hospital['robot']]);
+            if (!isset($robotList[$robot])) $robotList[$robot] = [];
 
+            if (validateInTimeRange($hospital['start_time'], $hospital['end_time'])) {
+                $accountDataLog = $hospital->accountDataLog->groupBy('advertiser_id')->toArray();
+//                dd($accountDataLog->toArray());
+                $robotList[$robot] =$accountDataLog +  $robotList[$robot];
+            }
         }
         return $robotList;
     }
