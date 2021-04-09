@@ -14,6 +14,17 @@ class AdvertiserNameList extends Model
         'hospital_id',
     ];
 
+    public function account()
+    {
+        return $this->hasOne(JLAccount::class, 'id', 'account_id');
+    }
+
+    public function hospital()
+    {
+        return $this->hasOne(HospitalType::class, 'id', 'hospital_id');
+    }
+
+
     public static function makeList($list)
     {
         foreach ($list as $item) {
