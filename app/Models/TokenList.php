@@ -45,6 +45,7 @@ class TokenList extends Model
             Log::info('Code debug 2 : ', [
                 'code' => $code
             ]);
+            // ! true // false ! //true
             return !!data_get($res, 'data.access_token');
         }
 

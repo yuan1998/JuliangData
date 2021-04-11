@@ -146,8 +146,9 @@
                         console.log('date :', date);
                         this.count++;
                         let error = false;
+                        let res;
                         try {
-                            let res = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
+                            res = await axios.get('/api/v1/juliang/advertiser_plan_data_pull', {
                                 params: {
                                     ...this.form,
                                     dates: [

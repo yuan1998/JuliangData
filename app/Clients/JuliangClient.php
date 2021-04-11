@@ -73,7 +73,7 @@ class JuliangClient
         $client = static::getClient();
 
         $response = $client->get(static::$request_url['advertiser_plan_data'], [
-            'form_params' => $data,
+            'json' => $data,
             'headers'     => [
                 "Access-Token" => $token,
             ]
@@ -86,7 +86,7 @@ class JuliangClient
     public static function asyncAdvertiserPlanData($client, $account, $start, $end, $page = 1, $count = 1000)
     {
         return $client->getAsync(static::$request_url['advertiser_plan_data'], [
-            'form_params' => [
+            'json' => [
                 'advertiser_id' => $account['advertiser_id'],
                 'start_date'    => $start,
                 'end_date'      => $end,

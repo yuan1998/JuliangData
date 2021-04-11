@@ -73,6 +73,7 @@ class JLAdvertiserPlanDataController extends AdminController
      */
     protected function grid()
     {
+//        dd(123);
 
         initVue();
         disableAutocomplete();
