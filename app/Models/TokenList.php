@@ -42,6 +42,9 @@ class TokenList extends Model
         if ($this->status !== 1 || $this->tokenIsExpires()) {
             $res  = $this->refreshToken($app);
             $code = data_get($res, 'code');
+            Log::info('Code debug', [
+                'code' => $code
+            ]);
             return !($code === 0);
         }
 

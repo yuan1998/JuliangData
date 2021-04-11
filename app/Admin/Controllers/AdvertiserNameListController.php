@@ -29,6 +29,7 @@ class AdvertiserNameListController extends AdminController
         $grid->disableActions();
 
 
+
         $grid->model()
             ->with([
                 'account',

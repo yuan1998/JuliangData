@@ -170,9 +170,7 @@ class JLAccountController extends AdminController
             $convert = $this->adPlanData->sum('attribution_convert');
 
             return round($cost / $convert, 3) . '元';
-
         });
-
 
         return $grid;
     }
@@ -280,3 +278,4 @@ class JLAccountController extends AdminController
         return $form;
     }
 }
+
