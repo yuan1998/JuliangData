@@ -42,7 +42,7 @@ class TokenList extends Model
         if ($this->status !== 1 || $this->tokenIsExpires()) {
             $res  = $this->refreshToken($app);
             $code = data_get($res, 'code');
-            Log::info('Code debug', [
+            Log::info('Code debug 2 : ', [
                 'code' => $code
             ]);
             return !($code === 0);
@@ -71,7 +71,9 @@ class TokenList extends Model
         $response = JuliangClient::refreshToken($this->refresh_token, $app);
         Log::info('刷新请求结果', $response);
         $code = data_get($response, 'code');
-
+        Log::info('Code debug 1 : ', [
+            'code' => $code
+        ]);
         switch ($code) {
             case 0:
                 $data                     = $response['data'];
