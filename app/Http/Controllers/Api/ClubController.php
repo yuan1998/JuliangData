@@ -71,27 +71,19 @@ class ClubController extends Controller
 
     public function baiduPost(Request $request)
     {
-        Log::info('测试 post 接受数据', $request->all(),$request->get('formDetail'));
+        Log::info('测试 post 接受数据', $request->get('formDetail'));
 
-        return;
-        $data   = [
-            '渠道'   => '',
+        $data = [
+            '渠道'   => '基木鱼',
             '位置'   => $request->get('leads_create_time'),
             '电话'   => $request->get('cluePhoneNumber'),
             '提交时间' => $request->get('commitTime'),
         ];
-        $bundle = [];
-        try {
-            $val = json_decode($request->get('formDetail'), true);
-            if ($val)
-                $bundle = $val;
-        } catch (\Exception $exception) {
-
-        }
-        $data = $data + $bundle;
         $msg  = collect($data)->map(function ($value, $key) {
-            return $key . ' : ' . $value;
-        })->join('<br>');
+                return $key . ' : ' . $value;
+            })->join('<br>') . collect($request->get('formDetail'))->map(function ($val) {
+                return $val['name'] . ':' . $val['value'];
+            })->join('<br>');
 
 
         $this->sendKst($msg);
