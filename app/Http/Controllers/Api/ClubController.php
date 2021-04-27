@@ -81,7 +81,7 @@ class ClubController extends Controller
         ];
         $msg  = collect($data)->map(function ($value, $key) {
                 return $key . ' : ' . $value;
-            })->join('<br>') . collect($request->get('formDetail'))->map(function ($val) {
+            })->join('<br>') . '<br>'. collect($request->get('formDetail'))->map(function ($val) {
                 return $val['name'] . ':' . $val['value'];
             })->join('<br>');
 
