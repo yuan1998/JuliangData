@@ -61,12 +61,42 @@ class ClubController extends Controller
 
         }
         $data = $data + $bundle;
-        $msg = collect($data)->map(function ($value , $key) {
-            return $key . ' : ' .$value;
+        $msg  = collect($data)->map(function ($value, $key) {
+            return $key . ' : ' . $value;
+        })->join('<br>');
+
+
+        $this->sendKst($msg);
+    }
+
+    public function baiduPost(Request $request)
+    {
+        Log::info('测试 post 接受数据', $request->all());
+
+        return;
+        $data   = [
+            '渠道'   => '广点通',
+            '位置'   => $request->get('tel_location'),
+            '名称'   => $request->get('leads_name'),
+            '电话'   => $request->get('leads_tel'),
+            '提交时间' => $request->get('leads_create_time'),
+        ];
+        $bundle = [];
+        try {
+            $val = json_decode($request->get('bundle'), true);
+            if ($val)
+                $bundle = $val;
+        } catch (\Exception $exception) {
+
+        }
+        $data = $data + $bundle;
+        $msg  = collect($data)->map(function ($value, $key) {
+            return $key . ' : ' . $value;
         })->join('<br>');
 
 
         $this->sendKst($msg);
         Log::info('测试 post 接受数据', $data);
     }
+
 }
