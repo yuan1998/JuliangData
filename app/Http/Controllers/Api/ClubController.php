@@ -71,7 +71,7 @@ class ClubController extends Controller
 
     public function baiduPost(Request $request)
     {
-        Log::info('测试 post 接受数据', $request->get('formDetail'));
+//        Log::info('测试 post 接受数据', $request->get('formDetail'));
 
         $data = [
             '渠道'   => '基木鱼',
