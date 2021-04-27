@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 class ClubController extends Controller
 {
 
-    public function sendKst($message)
+    public function sendKst($message, $dp = '')
     {
         $serve = env('REMOTE_CHROME');
         if (!$serve) {
@@ -37,7 +37,7 @@ class ClubController extends Controller
         $driver = RemoteWebDriver::create(
             $serve, $capabilities
         );
-        $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
+        $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=' . $dp . '&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
         sleep(10);
         $driver->close();
     }
@@ -66,7 +66,7 @@ class ClubController extends Controller
         })->join('<br>');
 
 
-        $this->sendKst($msg);
+        $this->sendKst($msg,$request->get('dp',''));
     }
 
     public function baiduPost(Request $request)
@@ -81,12 +81,12 @@ class ClubController extends Controller
         ];
         $msg  = collect($data)->map(function ($value, $key) {
                 return $key . ' : ' . $value;
-            })->join('<br>') . '<br>'. collect($request->get('formDetail'))->map(function ($val) {
+            })->join('<br>') . '<br>' . collect($request->get('formDetail'))->map(function ($val) {
                 return $val['name'] . ':' . $val['value'];
             })->join('<br>');
 
 
-        $this->sendKst($msg);
+        $this->sendKst($msg,$request->get('dp',''));
         Log::info('测试 post 接受数据', $data);
     }
 
