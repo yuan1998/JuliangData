@@ -400,7 +400,6 @@ class JLAdvertiserPlanData extends Model
             'page'          => $page,
             'group_by'      => '["STAT_GROUP_BY_FIELD_ID","STAT_GROUP_BY_FIELD_STAT_TIME"]'
         ], $token['access_token']);
-//        dd($account['advertiser_id'], $response['code']);
 
         if ($response['code'] === 0) {
             $data = $response['data'];
@@ -466,9 +465,9 @@ class JLAdvertiserPlanData extends Model
         ]);
 
         $promise = $pool->promise();
-// Force the pool of requests to complete.
+
         $promise->wait();
-//        dd($responses);
+
     }
 
 }

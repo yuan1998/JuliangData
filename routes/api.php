@@ -32,5 +32,9 @@ Route::prefix('v1')
             });
         });
 
+        Route::prefix('club')->name('club.')->group(function () {
+            Route::get('post', 'ClubController@post');
+        });
+
 
     });

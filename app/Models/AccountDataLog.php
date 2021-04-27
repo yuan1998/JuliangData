@@ -184,8 +184,6 @@ class AccountDataLog extends Model
 
         $now = Carbon::now()->toDateTimeString();
         foreach ($data as $accountId => $planData) {
-
-
             $advertiserId = data_get($planData, '0.advertiser_id');
             $model        = [
                 'show'            => $planData->sum('show'),

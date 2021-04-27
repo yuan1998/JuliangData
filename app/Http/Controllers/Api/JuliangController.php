@@ -62,7 +62,6 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
     {
         $dates      = $request->get('dates');
         $hospitalId = $request->get('hospital_id');
-
         $data = JLAdvertiserPlanData::allAccountGetData($hospitalId, $dates);
 
         return response()->json([
