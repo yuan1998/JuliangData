@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,8 +39,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="73" column="30" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
+            <state relative-caret-position="99">
+              <caret line="73" column="77" selection-start-line="73" selection-start-column="77" selection-end-line="73" selection-end-column="77" />
             </state>
           </provider>
         </entry>
@@ -331,8 +330,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="183" />
-    <option name="y" value="203" />
+    <option name="x" value="852" />
+    <option name="y" value="279" />
     <option name="width" value="1920" />
     <option name="height" value="1063" />
   </component>
@@ -480,12 +479,12 @@
       <workItem from="1618050964431" duration="16798000" />
       <workItem from="1618969539422" duration="7271000" />
       <workItem from="1619162072306" duration="521000" />
-      <workItem from="1619486099282" duration="8254000" />
+      <workItem from="1619486099282" duration="8999000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="465634000" />
+    <option name="totallyTimeSpent" value="466379000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -497,7 +496,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="183" y="203" width="1920" height="1063" extended-state="0" />
+    <frame x="852" y="279" width="1920" height="1063" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17716116" />
@@ -893,8 +892,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="73" column="30" selection-start-line="73" selection-start-column="30" selection-end-line="73" selection-end-column="30" />
+        <state relative-caret-position="99">
+          <caret line="73" column="77" selection-start-line="73" selection-start-column="77" selection-end-line="73" selection-end-column="77" />
         </state>
       </provider>
     </entry>
