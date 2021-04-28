@@ -38,8 +38,8 @@ class ClubController extends Controller
             $serve, $capabilities
         );
         $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=' . $dp . '&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
-        sleep(10);
-        $driver->close();
+        sleep(5);
+        $driver->quit();
     }
 
     public function post(Request $request)
