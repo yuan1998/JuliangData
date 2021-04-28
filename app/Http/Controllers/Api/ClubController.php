@@ -87,7 +87,7 @@ class ClubController extends Controller
 
 
         $this->sendKst($msg,$request->get('dp',''));
-        Log::info('测试 post 接受数据', $data);
+        return 'OK';
     }
 
 }
