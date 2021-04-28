@@ -22,7 +22,6 @@ class ClubController extends Controller
             return;
         }
 //        dd($message);
-
         $options = new ChromeOptions();
 
         $options->addArguments([
@@ -37,8 +36,17 @@ class ClubController extends Controller
         $driver = RemoteWebDriver::create(
             $serve, $capabilities
         );
-        $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=' . $dp . '&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
-        sleep(5);
+        try {
+
+            $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=' . $dp . '&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
+            sleep(5);
+        }catch (\Exception $exception) {
+            Log::error('获得错误' , [
+                'message' => $exception->getMessage()
+            ]);
+        }
+
+
         $driver->quit();
     }
 
