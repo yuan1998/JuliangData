@@ -11,7 +11,7 @@ use App\Models\AccountDataLog;
 use App\Models\HospitalType;
 use App\Models\JLAdvertiserPlanData;
 use App\Models\JLAccount;
-use App\Models\JLApp;
+use App\Models\JLApp;                             
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Closure;
@@ -103,18 +103,7 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 //        $data = JLAccount::pullTodayAdvertiserPlanData();
 
         $dateString = Carbon::today()->toDateString();
-//        $types = HospitalType::query()
-//            ->select([
-//                'id',
-//                'robot'
-//            ])
-//            ->get();
-//        foreach ($types as $type) {
-//            pullAccountDataOfHospitalId::dispatch($type['id'], $date, !!$type['robot']);
-//        }
 
-//        $dateString  = '2021-04-08';
-//        $d = pullAccountDataOfHospitalId::dispatch(3, $dateString, true)->onQueue('test');
         AccountDataLog::doToday();
         dd(123);
         AccountDataLog::sendAccountToRobot($dateString, 3);
@@ -132,7 +121,6 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
 //        dd($accounts);
         $accountList = JLAccount::parserAccountsToQuery($accounts);
 
-
         dd($accountList);
 
         foreach ($accountList as $account)
@@ -140,8 +128,6 @@ https://ad.oceanengine.com/openapi/audit/oauth.html?app_id=1668736156326939&stat
                 'name'   => $account['advertiser_name'],
                 'result' => JLAdvertiserPlanData::getOneDayOfAccount($account, $dateString)
             ]);
-
-
         dd(123);
     }
 

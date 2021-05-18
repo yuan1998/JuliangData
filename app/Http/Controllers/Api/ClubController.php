@@ -48,6 +48,25 @@ class ClubController extends Controller
         $driver->quit();
     }
 
+    public function customerPost(Request $request)
+    {
+        $msg = $request->get('msg');
+        Log::info('1. 自定义接受数据 ', [
+            $request->get('info')
+        ]);
+        if (!$msg) {
+            return "Not Message!";
+        }
+
+        $key = 'customer_club_' . $request->get('key');
+        if (!Cache::get($key)) {
+            Cache::put($key, 1, 60 * 60 * 25);
+            $this->sendKst($msg, $request->get('dp', ''));
+        }
+
+        return 'OK';
+    }
+
     public function post(Request $request)
     {
         $tel = $request->get('leads_tel');
@@ -88,8 +107,6 @@ class ClubController extends Controller
         }
 
         return 'OK';
-
-
     }
 
     public function baiduPost(Request $request)

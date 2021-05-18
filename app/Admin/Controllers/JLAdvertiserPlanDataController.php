@@ -210,6 +210,7 @@ class JLAdvertiserPlanDataController extends AdminController
         $show->field('follow', __('Follow'));
         $show->field('form', __('Form'));
         $show->field('game_addiction', __('Game addiction'));
+
         $show->field('game_addiction_cost', __('Game addiction cost'));
         $show->field('game_addiction_rate', __('Game addiction rate'));
         $show->field('home_visited', __('Home visited'));

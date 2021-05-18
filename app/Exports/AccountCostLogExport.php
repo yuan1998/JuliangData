@@ -37,7 +37,6 @@ class AccountCostLogExport implements FromCollection, WithHeadings, WithStrictNu
      */
     public function collection()
     {
-
         return collect($this->data)->map(function ($item) {
             return [
                 data_get($item , 'name'),
