@@ -59,10 +59,7 @@ class ClubController extends Controller
         }
 
         $key = 'customer_club_' . $request->get('key');
-        if (!Cache::get($key)) {
-            Cache::put($key, 1, 60 * 60 * 25);
-            $this->sendKst($msg, $request->get('dp', ''));
-        }
+        $this->sendKst($msg, $request->get('dp', ''));
 
         return 'OK';
     }
