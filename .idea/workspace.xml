@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f01f7f53-c884-4196-abdb-e4cc2f30a049" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/juliang_project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/juliang_project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,11 +29,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="451">
-              <caret line="61" column="54" selection-start-line="61" selection-start-column="54" selection-end-line="61" selection-end-column="54" />
+            <state relative-caret-position="418">
+              <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="497">
+              <caret line="29" column="7" lean-forward="true" selection-start-line="29" selection-start-column="7" selection-end-line="29" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/cors.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="269">
+              <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -105,8 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Admin/Controllers/UserController.php" />
-        <option value="$PROJECT_DIR$/app/Admin/Actions/PullAdvertiserPlanDataAction.php" />
         <option value="$PROJECT_DIR$/resources/js/components/actions/ExportAdvertiserPlanData.vue" />
         <option value="$PROJECT_DIR$/database/migrations/2020_09_20_105346_create_account_data_logs_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2020_09_20_213850_create_table_account_link_user.php" />
@@ -156,6 +177,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/JuliangController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Kernel.php" />
+        <option value="$PROJECT_DIR$/config/cors.php" />
       </list>
     </option>
   </component>
@@ -279,6 +302,8 @@
       <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
       <path value="$PROJECT_DIR$/vendor/php-webdriver/webdriver" />
       <path value="$PROJECT_DIR$/vendor/laravel/dusk" />
+      <path value="$PROJECT_DIR$/vendor/fruitcake/laravel-cors" />
+      <path value="$PROJECT_DIR$/vendor/asm89/stack-cors" />
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
@@ -435,12 +460,12 @@
       <workItem from="1619745274420" duration="3935000" />
       <workItem from="1619847662725" duration="20485000" />
       <workItem from="1620698500152" duration="10377000" />
-      <workItem from="1621327483052" duration="458000" />
+      <workItem from="1621327483052" duration="2238000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="508983000" />
+    <option name="totallyTimeSpent" value="510763000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,7 +480,7 @@
     <frame x="218" y="289" width="1920" height="1063" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18569905" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18569905" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -471,7 +496,7 @@
       <window_info anchor="bottom" id="GraphQL" order="9" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50053364" side_tool="true" weight="0.32312566" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.4994664" visible="true" weight="0.17845829" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.4994664" visible="true" weight="0.17845829" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -482,16 +507,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Admin/Actions/Account/BatchReferershToken.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="820">
-          <caret line="44" column="44" selection-start-line="44" selection-start-column="32" selection-end-line="44" selection-end-column="44" />
-          <folding>
-            <element signature="e#45#82#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Actions/JLAccount/RefreshToken.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="820">
@@ -502,11 +517,6 @@
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-237" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-616" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Admin/Actions/Account/PullData.php">
@@ -734,16 +744,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1254">
-          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
-          <folding>
-            <element signature="e#31#72#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/AccountDataLog.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6006">
@@ -840,10 +840,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Console/Kernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="38" column="31" selection-start-line="38" selection-start-column="31" selection-end-line="38" selection-end-column="31" />
+          <folding>
+            <element signature="e#31#72#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ClubController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="451">
-          <caret line="61" column="54" selection-start-line="61" selection-start-column="54" selection-end-line="61" selection-end-column="54" />
+        <state relative-caret-position="418">
+          <caret line="60" column="31" selection-start-line="60" selection-start-column="31" selection-end-line="60" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Kernel.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="497">
+          <caret line="29" column="7" lean-forward="true" selection-start-line="29" selection-start-column="7" selection-end-line="29" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/cors.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
         </state>
       </provider>
     </entry>
