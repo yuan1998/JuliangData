@@ -24,8 +24,7 @@ class ClubController extends Controller
         $options = new ChromeOptions();
 
         $options->addArguments([
-            '--no-sandbox',
-            '--window-size=1920,1080',
+            "--headless", "--disable-gpu", "--no-sandbox",
             '--ignore-certificate-errors'
         ]);
 
@@ -38,8 +37,9 @@ class ClubController extends Controller
 
         try {
             $driver->get('https://vipz2-hzbk2.kuaishang.cn/bs/im.htm?cas=57284___922518&fi=67975&dp=' . $dp . '&sText=xxl_page&vi=&ism=1&cv=' . urlencode($message));
-
+            Log::info($driver->getTitle());
             sleep(5);
+
         } catch (\Exception $exception) {
             Log::error('获得错误', [
                 'message' => $exception->getMessage()
@@ -74,11 +74,11 @@ class ClubController extends Controller
         if (!Cache::get($key)) {
             Cache::put($key, 1, 60 * 60 * 25);
 
-            $data   = [
-                '渠道'   => '广点通',
-                '位置'   => $request->get('tel_location'),
-                '名称'   => $request->get('leads_name'),
-                '电话'   => $tel,
+            $data = [
+                '渠道' => '广点通',
+                '位置' => $request->get('tel_location'),
+                '名称' => $request->get('leads_name'),
+                '电话' => $tel,
                 '提交时间' => $request->get('leads_create_time'),
             ];
             $bundle = [];
@@ -90,7 +90,7 @@ class ClubController extends Controller
 
             }
             $data = $data + $bundle;
-            $msg  = collect($data)
+            $msg = collect($data)
                 ->map(function ($value, $key) {
                     return $key . ' : ' . $value;
                 })
@@ -119,12 +119,12 @@ class ClubController extends Controller
             Cache::put($key, 1, 60 * 60 * 25);
 
             $data = [
-                '渠道'   => '基木鱼',
-                '位置'   => $request->get('area'),
-                '电话'   => $tel,
+                '渠道' => '基木鱼',
+                '位置' => $request->get('area'),
+                '电话' => $tel,
                 '提交时间' => $request->get('commitTime'),
             ];
-            $msg  = collect($data)->map(function ($value, $key) {
+            $msg = collect($data)->map(function ($value, $key) {
                     return $key . ' : ' . $value;
                 })->join('<br>') . '<br>' . collect($request->get('formDetail'))->map(function ($val) {
                     return $val['name'] . ':' . $val['value'];
