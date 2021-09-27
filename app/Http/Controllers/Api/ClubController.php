@@ -30,7 +30,7 @@ class ClubController extends Controller
 
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
-        $capabilities->setPlatform("Windows");
+//        $capabilities->setPlatform("Linux");
 
         $driver = RemoteWebDriver::create(
             $serve, $capabilities
