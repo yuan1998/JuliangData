@@ -34,6 +34,7 @@ Route::prefix('v1')
 
         Route::prefix('club')->name('club.')->group(function () {
             Route::post('post', 'ClubController@post');
+            Route::post('ks_post', 'ClubController@ksPost');
             Route::post('baiduPost', 'ClubController@baiduPost');
             Route::post('customerPost', 'ClubController@customerPost');
         });
