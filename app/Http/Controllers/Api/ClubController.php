@@ -143,4 +143,45 @@ class ClubController extends Controller
         return 'OK';
     }
 
+    public function ksPost(Request $request)
+    {
+        $tel = $request->get('phone');
+        $all = $request->all('phone');
+
+        Log::info('1. 快手接受数据 ', [
+            $all
+        ]);
+        return null;
+
+        $key = 'ks_club_' . $tel;
+
+        if (!Cache::get($key)) {
+            Cache::put($key, 1, 60 * 60 * 25);
+
+            $data = [
+                '渠道' => '快手',
+                '位置' => $request->get('area'),
+                '电话' => $tel,
+                '提交时间' => $request->get('create_time_date_time'),
+            ];
+            $msg = collect($data)->map(function ($value, $key) {
+                    return $key . ' : ' . $value;
+                })->join('<br>') . '<br>' . collect($request->get('formDetail'))->map(function ($val) {
+                    return $val['name'] . ':' . $val['value'];
+                })->join('<br>');
+
+
+            $this->sendKst($msg, $request->get('dp', ''));
+        } else {
+            Log::info('2. 百度接受数据 : 数据重复', [
+                $tel
+            ]);
+        }
+
+
+        return 'OK';
+    }
+
+
+
 }
